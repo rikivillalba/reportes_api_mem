@@ -16,23 +16,32 @@ jobs:
       uses: r-lib/actions/setup-r@v2
       with:
         r-version: '4.1.0'  # Specify the R version you need
-
-    - name: Set R library path
+    - name: Set RENV_PATHS_ROOT
+      shell: bash
       run: |
-        echo ".libPaths('~/R/library')" > .Rprofile
-
-    - name: Cache R packages
-      uses: actions/cache@v3
+        echo "RENV_PATHS_ROOT=${{ runner.temp }}/renv" >> $GITHUB_ENV
+    - name: Install and activate renv
+      run: |
+        install.packages("renv")
+        renv::activate()
+      shell: Rscript {0}
+    - name: Get R and OS version
+      id: get-version
+      run: |
+        cat("##[set-output name=os-version;]", sessionInfo()$running, "\n", sep = "")
+        cat("##[set-output name=r-version;]", R.Version()$version.string, sep = "")
+      shell: Rscript {0}
+    - name: Restore Renv package cache
+      uses: actions/cache@v4
       with:
-        path: ~/R/library
-        key: ${{ runner.os }}-r-${{ hashFiles('**/*.R') }}
-        restore-keys: |
-          ${{ runner.os }}-r-
-
+        path: ${{ env.RENV_PATHS_ROOT }}
+        key: ${{ steps.get-version.outputs.os-version }}-${{ steps.get-version.outputs.r-version }}-${{ inputs.cache-version }}-${{ hashFiles('renv.lock') }}
+        restore-keys: ${{ steps.get-version.outputs.os-version }}-${{ steps.get-version.outputs.r-version }}-${{inputs.cache-version }}-
     - name: Install R packages if not cached
+#        Rscript -e 'packages <- c("data.table", "httr", "ggplot2", "jsonlite"); installed <- rownames(installed.packages()); to_install <- setdiff(packages, installed); if (length(to_install) > 0) install.packages(to_install, repos="https://cloud.r-project.org")'
       run: |
-        Rscript -e 'packages <- c("data.table", "httr", "ggplot2", "jsonlite"); installed <- rownames(installed.packages()); to_install <- setdiff(packages, installed); if (length(to_install) > 0) install.packages(to_install, repos="https://cloud.r-project.org")'
-
+        install.packages(c("data.table", "httr", "ggplot2", "jsonlite"));
+      shell: Rscript {0}
     - name: Cache data files
       uses: actions/cache@v3
       with:
@@ -45,7 +54,7 @@ jobs:
 
     - name: Run R script
       run: |
-        Rscript your_script.R
+        Rscript demanda_diaria_API_MEM.R
 
     - name: Cache updated data files
       uses: actions/cache@v3
@@ -59,5 +68,12 @@ jobs:
       run: |
         datetime=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
         mv plot.svg plot${datetime}.svg
+        echo "datetime=${datetime}" >> $GITHUB_ENV
         echo "Plot saved as plot${datetime}.svg"
+        
+    - name: Upload plot as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: plot-${{ github.run_id }}
+        path: plot${{ env.datetime }}.svg
 

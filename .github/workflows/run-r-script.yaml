@@ -1,0 +1,63 @@
+name: Run R Script
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Runs daily at midnight
+
+jobs:
+  run-r-script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up R
+      uses: r-lib/actions/setup-r@v2
+      with:
+        r-version: '4.1.0'  # Specify the R version you need
+
+    - name: Set R library path
+      run: |
+        echo ".libPaths('~/R/library')" > .Rprofile
+
+    - name: Cache R packages
+      uses: actions/cache@v3
+      with:
+        path: ~/R/library
+        key: ${{ runner.os }}-r-${{ hashFiles('**/*.R') }}
+        restore-keys: |
+          ${{ runner.os }}-r-
+
+    - name: Install R packages if not cached
+      run: |
+        Rscript -e 'packages <- c("data.table", "httr", "ggplot2", "jsonlite"); installed <- rownames(installed.packages()); to_install <- setdiff(packages, installed); if (length(to_install) > 0) install.packages(to_install, repos="https://cloud.r-project.org")'
+
+    - name: Cache data files
+      uses: actions/cache@v3
+      with:
+        path: |
+          demanda_diaria_Edesur.txt
+          demanda_diaria_GBA.txt
+        key: ${{ runner.os }}-data-${{ hashFiles('demanda_diaria_Edesur.txt', 'demanda_diaria_GBA.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-data-
+
+    - name: Run R script
+      run: |
+        Rscript your_script.R
+
+    - name: Cache updated data files
+      uses: actions/cache@v3
+      with:
+        path: |
+          demanda_diaria_Edesur.txt
+          demanda_diaria_GBA.txt
+        key: ${{ runner.os }}-data-${{ hashFiles('demanda_diaria_Edesur.txt', 'demanda_diaria_GBA.txt') }}
+
+    - name: Save plot
+      run: |
+        datetime=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+        mv plot.svg plot${datetime}.svg
+        echo "Plot saved as plot${datetime}.svg"
+

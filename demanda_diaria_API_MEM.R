@@ -218,10 +218,10 @@ compilarSOTR <- function() {
 obtenerDemandasGBA <- function(ndias = 15) {
   completarSOTR(c(426, 1078))
   dem <- data.table::fread(
-    file = "demanda_diaria_Edesur.txt", 
+    file = "demanda_diaria_GBA.txt", 
     colClasses = .csvdefs[["demanda_diaria"]])
   dem.eds <- data.table::fread(
-    file = "demanda_diaria_GBA.txt",
+    file = "demanda_diaria_Edesur.txt",
     colClasses = .csvdefs[["demanda_diaria"]])
   dem[dem.eds, on = "fecha", eds := i.dem]
   # es buena idea esto?
@@ -235,6 +235,7 @@ obtenerDemandasGBA <- function(ndias = 15) {
 
 plot.DemandasGBA <- function(x) {
   data <- x$data
+  ndias = x$ndias
   max_24 <- data[
     fecha >= fecha[.N] - 12 * 3600 &
       eds == max(eds[fecha >= fecha[.N] - 12 * 3600], na.rm = T)]
@@ -258,7 +259,7 @@ plot.DemandasGBA <- function(x) {
     ggplot2::scale_y_continuous(
       breaks = scales::extended_breaks(n = 10),
       name = "Demanda GBA y Edesur [MWh]",
-      sec.axis = sec_axis(\(x) x / 250 - 10, name = "Temperatura °C")
+      sec.axis = ggplot2::sec_axis(\(x) x / 250 - 10, name = "Temperatura °C")
     ) +
     ggplot2::theme(
       axis.text.x = ggplot2::element_text(angle = 90),
@@ -287,16 +288,14 @@ plot.DemandasGBA <- function(x) {
 
 
 # ---- Gráfico de demandas diarias ----
-# edesur y GBA
-if (FALSE) {
-  .csvdefs$demanda_diaria
-#  library(data.table)
- # library(ggplot2)
-  setwd("C:\\Users\\ar30592993\\OneDrive - Enel Spa\\cammesa\\demanda_diaria\\REST")  
-  demandasGBA <- obtenerDemandasGBA()
-  plot(demandasGBA)
 
-}
+#if (FALSE) {
+
+  demandasGBA <- obtenerDemandasGBA()
+  svg("demanda.svg")
+  plot(demandasGBA)
+  dev.off()
+#}
 
 #---- Consulta de agentes ----
 if (F) {

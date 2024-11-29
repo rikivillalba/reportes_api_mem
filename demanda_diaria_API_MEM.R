@@ -287,15 +287,6 @@ plot.DemandasGBA <- function(x) {
 }
 
 
-# ---- Gráfico de demandas diarias ----
-
-#if (FALSE) {
-
-  demandasGBA <- obtenerDemandasGBA()
-  svg("demanda.svg")
-  plot(demandasGBA)
-  dev.off()
-#}
 
 #---- Consulta de agentes ----
 if (F) {
@@ -330,5 +321,14 @@ if (F) {
 # if (F) {
 #   compilarSOTR()
 # }
+
+# ---- Gráfico de demandas diarias ----
+
+#if (FALSE) {
+
+demandasGBA <- obtenerDemandasGBA()
+svg("demanda.svg")
+plot(demandasGBA)
+dev.off()
 
 

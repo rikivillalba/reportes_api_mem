@@ -5,25 +5,17 @@
 # Una fu
 
 
-#---- Funciones ----
+#---- auxiliar ----
 
-# regiones de demanda
-obtenerRegion <- function() {
-  url <- httr::build_url(within.list(
-    httr::parse_url("https://api.cammesa.com/demanda-svc/demanda/RegionesDemanda"),
-    query <- NULL
-  ))
-data.table:::cedta()
-  withCallingHandlers(
-    error = tryInvokeRestart("retry"),
-    {
-      region <- jsonlite::fromJSON(url)
-      setDT(region)
-    }
+.csvdefs <- local({
+  
+  demanda_diaria <- c(
+    fecha = "POSIXct", dem = "integer",
+    temp = "numeric", fecha_consulta = "Date"
   )
-  unique(region, by = "id", fromLast = T)
-  #  setnames(region,  c("fecha", "demanda", "fecha_consulta"))
-}
+  
+  environment()
+})
 
 withRetries<- function(n, expr) {
   for (i in seq_len(n)) 
@@ -37,9 +29,18 @@ withRetries<- function(n, expr) {
 
 make_API_URL <- function(.method, .domain = "demanda-svc/demanda/", ...) {
   httr::build_url(within.list(
-    httr::parse_url(paste0("https://api.cammesa.com/", .domain, .method),
-    query <- list(...))))
+    httr::parse_url(paste0("https://api.cammesa.com/", .domain, .method)),
+    query <- list(...)))
 }
+
+normalizar_nombre <- function(nombre) {
+  nombre |> 
+    sub(pattern = "^demanda_diaria_\\s*(.*?)\\s?\\.txt$", replace="\\1") |> 
+    gsub(pattern = "\\s+", replace = "_") |> 
+    iconv(sub = "_", to = "ASCII//TRANSLIT") |> 
+    sprintf(fmt = "demanda_diaria_%s.txt") 
+}
+
 # ---- apiCalls ----
 ## esta API utiliza fechas en formato simple sin tiempo
 # tz <- "Etc/GMT"
@@ -55,6 +56,18 @@ DemandaYTemperaturaRegionByFecha <- function(fecha = Sys.Date(), id_region) {
       id_region = id_region)
     jsonlite::fromJSON(url)
   })
+}
+
+# ---- proceso ----
+
+# regiones de demanda
+obtenerRegion <- function() {
+  url <- make_API_URL("RegionesDemanda")
+  withRetries(5, {
+    region <- jsonlite::fromJSON(url)
+  })
+  data.table::setDT(region)
+  unique(region, by = "id", fromLast = T)
 }
 
 #consulta SOTR hacia atrás, todo lo disponible.
@@ -104,43 +117,52 @@ completarSOTR <- function(regiones, fecha = Sys.Date()) {
   for (id_region in region[, id]) {
     if (missing(regiones) || id_region %in% regiones) {
       nombre <- region[id == id_region, nombre[1]]
-      fname <- sprintf("demanda_diaria_%s.txt", nombre)
+      fname <- normalizar_nombre(nombre)
       if (!file.exists(fname)) {
         stop("no se encontró ", fname)
       } else {
-        old_data <- data.table::fread(fname)
+        old_data <- data.table::fread(
+          file = fname,
+          colClasses = .csvdefs[["demanda_diaria"]]
+        )
         data.table::setorder(old_data, fecha, fecha_consulta)
         desde <- old_data[.N, as.Date(fecha)]
-        hasta <- Sys.Date()
-        if (hasta < desde) stop(gettextf(
-          "fecha futura en demanda_diaria [%s > %s, idreg=%d (%s)]",
-          format(desde, "%Y-%m-%d"), format(hasta, "%Y-%m-%d"),
-          id_region, nombre))
+        hasta <- fecha
+        if (hasta < desde) {
+          stop(gettextf(
+            "fecha futura en demanda_diaria [%s > %s, idreg=%d (%s)]",
+            format(desde, "%Y-%m-%d"), format(hasta, "%Y-%m-%d"),
+            id_region, nombre
+          ))
+        }
         fechas <- seq.Date(desde, hasta, by = "day")
-        # agregar columna fecha-consulta? 
-        # fecha_consulta = as.IDate(Sys.Date())
         new_data <- data.table::rbindlist(
-          lapply(fechas, DemandaYTemperaturaRegionByFecha, id_region=id_region))
-        
+          lapply(fechas, DemandaYTemperaturaRegionByFecha, id_region = id_region)
+        )
         new_data[, fecha_consulta := hasta]
         new_data[, fecha := as.POSIXct(fecha, format = "%Y-%m-%dT%H:%M:%OS%z")]
-        
-        setorder(new_data, fecha)
-        all_data <- unique(rbind(old_data, new_data), 
-                           by = c("fecha", "fecha_consulta"), fromLast = T)
+        data.table::setorder(new_data, fecha)
+        all_data <- unique(
+          by = c("fecha", "fecha_consulta"), fromLast = TRUE,
+          rbind(old_data, new_data[, .SD, .SDcols = intersect(
+            colnames(old_data), colnames(new_data)
+          )], fill = TRUE)
+        )
 
         # chequear completitud de la serie
         # tolerancia de 1 punto de dato de 15 (300 seg) minutos faltante
         stopifnot(as.numeric(max(diff.POSIXt(all_data[, fecha]))) <= 3300)
-        file_newname <- sprintf("demanda_diaria_%s.txt", nombre) 
+
+        file_newname <- fname
         message("Generar ", file_newname)
-        fwrite(all_data, file.path(folder, file_newname))
+        data.table::fwrite(all_data, file_newname)
       }
     }
   }
 }
 
 compilarSOTR <- function() {
+  stop("en mantenimiento")
   folder <- "C:\\Users\\ar30592993\\OneDrive - Enel Spa\\cammesa\\demanda_diaria\\REST"
   region <- request.region()
 
@@ -195,11 +217,15 @@ compilarSOTR <- function() {
 
 obtenerDemandasGBA <- function(ndias = 15) {
   completarSOTR(c(426, 1078))
-  dem <- data.table::fread(file = "demanda_diaria_Edesur.txt")
-  dem.eds <- data.table::fread(file = "demanda_diaria_GBA.txt")
+  dem <- data.table::fread(
+    file = "demanda_diaria_Edesur.txt", 
+    colClasses = .csvdefs[["demanda_diaria"]])
+  dem.eds <- data.table::fread(
+    file = "demanda_diaria_GBA.txt",
+    colClasses = .csvdefs[["demanda_diaria"]])
   dem[dem.eds, on = "fecha", eds := i.dem]
   # es buena idea esto?
-  data.talbe::setattr(dem$fecha, "tzone", "America/Buenos_Aires")
+  data.table::setattr(dem$fecha, "tzone", "America/Buenos_Aires")
   data <- dem[
     fecha_consulta >= Sys.Date() - ndias,
     .(fecha, dem, eds,
@@ -263,11 +289,13 @@ plot.DemandasGBA <- function(x) {
 # ---- Gráfico de demandas diarias ----
 # edesur y GBA
 if (FALSE) {
+  .csvdefs$demanda_diaria
 #  library(data.table)
  # library(ggplot2)
-  #setwd("C:\\Users\\ar30592993\\OneDrive - Enel Spa\\cammesa\\demanda_diaria\\REST")  
+  setwd("C:\\Users\\ar30592993\\OneDrive - Enel Spa\\cammesa\\demanda_diaria\\REST")  
   demandasGBA <- obtenerDemandasGBA()
   plot(demandasGBA)
+
 }
 
 #---- Consulta de agentes ----

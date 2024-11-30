@@ -37,7 +37,7 @@ jobs:
       with:
         path: ${{ env.RENV_PATHS_ROOT }}
         key: ${{ env.OS_VERSION }}-${{ env.R_VERSION }}-${{ inputs.cache-version }}-${{ hashFiles('renv.lock') }}
-        restore-keys: ${{ env.OS_VERSION }}-${{ env.R_VERSION }}-${{inputs.cache-version }}-
+        restore-keys: ${{ env.OS_VERSION }}-${{ env.R_VERSION }}-${{ inputs.cache-version }}-
     - name: Install R packages if not cached
 #        Rscript -e 'packages <- c("data.table", "httr", "ggplot2", "jsonlite"); installed <- rownames(installed.packages()); to_install <- setdiff(packages, installed); if (length(to_install) > 0) install.packages(to_install, repos="https://cloud.r-project.org")'
       run: |

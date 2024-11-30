@@ -28,21 +28,20 @@ jobs:
         renv::activate()
       shell: Rscript {0}
     - name: Get R and OS version
-      id: get-version
       run: |
-        cat("##[set-output name=os-version;]", sessionInfo()$running, "\n", sep = "")
-        cat("##[set-output name=r-version;]", R.Version()$version.string, sep = "")
+        cat(sprintf("OS_VERSION=%s\n", sessionInfo()$running), append=TRUE, file=Sys.getenv("GITHUB_ENV"));
+        cat(sprintf("R_VERSION=%s\n", R.Version()$version.string), append=TRUE, file=Sys.getenv("GITHUB_ENV")); 
       shell: Rscript {0}
     - name: Restore Renv package cache
       uses: actions/cache@v4
       with:
         path: ${{ env.RENV_PATHS_ROOT }}
-        key: ${{ steps.get-version.outputs.os-version }}-${{ steps.get-version.outputs.r-version }}-${{ inputs.cache-version }}-${{ hashFiles('renv.lock') }}
-        restore-keys: ${{ steps.get-version.outputs.os-version }}-${{ steps.get-version.outputs.r-version }}-${{inputs.cache-version }}-
+        key: ${{ env.OS_VERSION }}-${{ env.R_VERSION }}-${{ inputs.cache-version }}-${{ hashFiles('renv.lock') }}
+        restore-keys: ${{ env.OS_VERSION }}-${{ env.R_VERSION }}-${{inputs.cache-version }}-
     - name: Install R packages if not cached
 #        Rscript -e 'packages <- c("data.table", "httr", "ggplot2", "jsonlite"); installed <- rownames(installed.packages()); to_install <- setdiff(packages, installed); if (length(to_install) > 0) install.packages(to_install, repos="https://cloud.r-project.org")'
       run: |
-        install.packages(c("data.table", "httr", "ggplot2", "jsonlite"));
+        install.packages(c("httr", "ggplot2", "jsonlite", "data.table"));
       shell: Rscript {0}
     - name: Cache data files
       uses: actions/cache@v3

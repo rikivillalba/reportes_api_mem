@@ -51,8 +51,7 @@ jobs:
           demanda_diaria_GBA.txt
         key: ${{ runner.os }}-data
 #       key: ${{ runner.os }}-data-${{ hashFiles('demanda_diaria_Edesur.txt', 'demanda_diaria_GBA.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-data
+        restore-keys: ${{ runner.os }}-data
 
     - name: Run R script
       run: |
@@ -69,13 +68,13 @@ jobs:
     - name: Save plot
       run: |
         datetime=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-        mv plot.svg plot${datetime}.svg
+        mv demanda_diaria.svg demanda_diaria_${datetime}.svg
         echo "datetime=${datetime}" >> $GITHUB_ENV
-        echo "Plot saved as plot${datetime}.svg"
+        echo "Plot saved as demanda_diaria_${datetime}.svg"
         
     - name: Upload plot as artifact
       uses: actions/upload-artifact@v3
       with:
-        name: plot-${{ github.run_id }}
-        path: plot${{ env.datetime }}.svg
+        name: demanda_diaria_-${{ github.run_id }}
+        path: demanda_diaria_${{ env.datetime }}.svg
 

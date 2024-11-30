@@ -67,7 +67,7 @@ jobs:
         key: ${{ runner.os }}-data
     - name: Save plot
       run: |
-        datetime=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+        datetime=$(date -u +"%Y%m%dT%H%M%SZ")
         mv demanda_diaria.svg demanda_diaria_${datetime}.svg
         echo "datetime=${datetime}" >> $GITHUB_ENV
         echo "Plot saved as demanda_diaria_${datetime}.svg"

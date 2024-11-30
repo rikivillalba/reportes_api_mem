@@ -327,7 +327,7 @@ if (F) {
 #if (FALSE) {
 
 demandasGBA <- obtenerDemandasGBA()
-svg("demanda.svg")
+svg("demanda_diaria.svg", width = 12)
 plot(demandasGBA)
 dev.off()
 

@@ -50,9 +50,10 @@ jobs:
         path: |
           demanda_diaria_Edesur.txt
           demanda_diaria_GBA.txt
-        key: ${{ runner.os }}-data-${{ hashFiles('demanda_diaria_Edesur.txt', 'demanda_diaria_GBA.txt') }}
+        key: ${{ runner.os }}-data
+#       key: ${{ runner.os }}-data-${{ hashFiles('demanda_diaria_Edesur.txt', 'demanda_diaria_GBA.txt') }}
         restore-keys: |
-          ${{ runner.os }}-data-
+          ${{ runner.os }}-data
 
     - name: Run R script
       run: |
@@ -64,8 +65,8 @@ jobs:
         path: |
           demanda_diaria_Edesur.txt
           demanda_diaria_GBA.txt
-        key: ${{ runner.os }}-data-${{ hashFiles('demanda_diaria_Edesur.txt', 'demanda_diaria_GBA.txt') }}
-
+#        key: ${{ runner.os }}-data-${{ hashFiles('demanda_diaria_Edesur.txt', 'demanda_diaria_GBA.txt') }}
+        key: ${{ runner.os }}-data
     - name: Save plot
       run: |
         datetime=$(date -u +"%Y-%m-%dT%H:%M:%SZ")

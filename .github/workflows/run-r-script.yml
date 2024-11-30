@@ -73,8 +73,8 @@ jobs:
         echo "Plot saved as demanda_diaria_${datetime}.svg"
         
     - name: Upload plot as artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: demanda_diaria_-${{ github.run_id }}
+        name: ${{ github.run_id }}_demanda_diaria_${{ env.datetime }}
         path: demanda_diaria_${{ env.datetime }}.svg
 

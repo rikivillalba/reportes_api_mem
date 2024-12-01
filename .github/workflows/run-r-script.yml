@@ -44,7 +44,7 @@ jobs:
         install.packages(c("httr", "ggplot2", "jsonlite", "data.table"));
       shell: Rscript {0}
     - name: Cache data files
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: |
           demanda_diaria_Edesur.txt
@@ -58,7 +58,7 @@ jobs:
         Rscript demanda_diaria_API_MEM.R
 
     - name: Cache updated data files
-      uses: actions/cache@v3
+      uses: actions/cache/save@v4
       with:
         path: |
           demanda_diaria_Edesur.txt

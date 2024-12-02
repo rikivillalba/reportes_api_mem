@@ -50,6 +50,7 @@ jobs:
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add demanda_diaria_Edesur.txt demanda_diaria_GBA.txt
         git commit -m "Actions run_id=${{ github.run_id }}, dt=${{ env.datetime }}"
         gut push
     - name: Save plot

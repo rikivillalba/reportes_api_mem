@@ -217,8 +217,8 @@ compilarSOTR <- function() {
   )
 }
 
-obtenerDemandasGBA <- function(ndias = 15) {
-  completarSOTR(c(426, 1078))
+obtenerDemandasGBA <- function(ndias = 15, completar = TRUE) {
+  if (completar) completarSOTR(c(426, 1078))
   dem <- data.table::fread(
     file = "demanda_diaria_GBA.txt", 
     colClasses = .csvdefs[["demanda_diaria"]])
@@ -236,6 +236,7 @@ obtenerDemandasGBA <- function(ndias = 15) {
 }
 
 plot.DemandasGBA <- function(x) {
+  message("graficar")
   data <- x$data
   ndias = x$ndias
   max_24 <- data[
@@ -330,7 +331,9 @@ if (F) {
 {
   demandasGBA <- obtenerDemandasGBA()
   svg("demanda_diaria.svg", width = 12)
-  plot(demandasGBA)
+  print(plot(demandasGBA))
   dev.off()
+  invisible()
 }
+
 

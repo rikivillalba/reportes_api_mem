@@ -101,7 +101,7 @@ regenerarSOTR <- function(id_region, nombre, ask = TRUE) {
         message("Generar ", file_newname)
         saveRDS(data, file.path(folder, "data.RDS"))
         on.exit(message("Datos temporarios en", file.path(folder, "data.RDS")))
-        data.table::fwrite(data, file.path(folder, file_newname))
+        data.table::fwrite(data, file.path(folder, file_newname), eol = "\n")
       } else {
         message("No se encontraron datos")
         FALSE
@@ -154,7 +154,7 @@ completarSOTR <- function(regiones, fecha = Sys.Date()) {
 
         file_newname <- fname
         message("Generar ", file_newname)
-        data.table::fwrite(all_data, file_newname)
+        data.table::fwrite(all_data, file_newname, eol = "\n")
       }
     }
   }
@@ -194,13 +194,15 @@ compilarSOTR <- function() {
   message("Generar ", "demanda_diaria_all.txt.gz")
   fwrite(
     rbindlist(Map(data, f = \(df) df[, c("fecha", "dem", "fecha_consulta", "id_region")])),
-    file.path(folder, "demanda_diaria_all.txt.gz")
+    file.path(folder, "demanda_diaria_all.txt.gz"),
+    eol = "\n"
   )
 
   message("Generar ", "demanda_diaria_all_id_region.txt.gz")
   fwrite(
     region,
-    file.path(folder, "demanda_diaria_all_id_region.txt.gz")
+    file.path(folder, "demanda_diaria_all_id_region.txt.gz"),
+    eol = "\n"
   )
 
   message("Generar ", "demanda_diaria_all_temperatura.txt.gz")
@@ -210,7 +212,8 @@ compilarSOTR <- function() {
         Filter(f = \(df) "temp" %in% names(df)) |>
         Map(f = \(df) df[, c("fecha", "temp", "fecha_consulta", "id_region")])
     ),
-    file.path(folder, "demanda_diaria_all_temperatura.txt.gz")
+    file.path(folder, "demanda_diaria_all_temperatura.txt.gz"),
+    eol="\n"
   )
 }
 

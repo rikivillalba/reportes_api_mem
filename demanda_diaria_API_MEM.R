@@ -259,7 +259,7 @@ plot.DemandasGBA <- function(x) {
     ggplot2::scale_y_continuous(
       breaks = scales::extended_breaks(n = 10),
       name = "Demanda GBA y Edesur [MWh]",
-      sec.axis = ggplot2::sec_axis(\(x) x / 250 - 10, name = "Temperatura °C")
+      sec.axis = ggplot2::sec_axis(\(x) x / 250 - 10, name = "Temperatura \u00b0C")
     ) +
     ggplot2::theme(
       axis.text.x = ggplot2::element_text(angle = 90),
@@ -279,7 +279,7 @@ plot.DemandasGBA <- function(x) {
           sprintf("%d MW", eds),
           sprintf("%d MW", dem),
           format(fecha),
-          sprintf("%1.0f\ub0C", temp / 250 - 10)
+          sprintf("%1.0f\u00b0C", temp / 250 - 10)
         )
       )]
     )

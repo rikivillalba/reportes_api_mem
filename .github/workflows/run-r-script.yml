@@ -11,9 +11,11 @@ jobs:
 
     steps:
     - name: Checkout repository
+      # Esta acción también descarga demanda_diaria_GBA.txt y demanda_diaria_Edesur.txt del repo.
+      # versiones predeterminadas.
       uses: actions/checkout@v3
     - name: Install deps
-      run: sudo apt install libcurl4-openssl-dev
+      run: sudo apt-get install libcurl4-openssl-dev
     - name: Set up R
       uses: r-lib/actions/setup-r@v2
       with:
@@ -38,13 +40,11 @@ jobs:
         path: ${{ env.RENV_PATHS_ROOT }}
         key: ${{ env.OS_VERSION }}-${{ env.R_VERSION }}-${{ inputs.cache-version }}-${{ hashFiles('renv.lock') }}
         restore-keys: ${{ env.OS_VERSION }}-${{ env.R_VERSION }}-${{ inputs.cache-version }}-
-    - name: Install R packages if not cached
-#        Rscript -e 'packages <- c("data.table", "httr", "ggplot2", "jsonlite"); installed <- rownames(installed.packages()); to_install <- setdiff(packages, installed); if (length(to_install) > 0) install.packages(to_install, repos="https://cloud.r-project.org")'
-      run: |
-        install.packages(c("httr", "ggplot2", "jsonlite", "data.table"));
+    - name: Install R packages (or pull from cache)
+      run:  install.packages(c("httr", "ggplot2", "jsonlite", "data.table"));
       shell: Rscript {0}
     - name: Cache data files
-      uses: actions/cache@v4
+      uses: actions/cache/restore@v4
       with:
         path: |
           demanda_diaria_Edesur.txt
@@ -52,11 +52,9 @@ jobs:
         key: ${{ runner.os }}-data
 #       key: ${{ runner.os }}-data-${{ hashFiles('demanda_diaria_Edesur.txt', 'demanda_diaria_GBA.txt') }}
         restore-keys: ${{ runner.os }}-data
-
     - name: Run R script
       run: |
         Rscript demanda_diaria_API_MEM.R
-
     - name: Cache updated data files
       uses: actions/cache/save@v4
       with:

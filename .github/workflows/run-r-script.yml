@@ -8,11 +8,9 @@ on:
 jobs:
   run-r-script:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout repository
       # Esta acción también descarga demanda_diaria_GBA.txt y demanda_diaria_Edesur.txt del repo.
-      # versiones predeterminadas.
       uses: actions/checkout@v3
     - name: Install deps
       run: sudo apt-get install libcurl4-openssl-dev
@@ -20,9 +18,11 @@ jobs:
       uses: r-lib/actions/setup-r@v2
       with:
         r-version: '4.1.0'  # Specify the R version you need
-    - name: Set RENV_PATHS_ROOT
+    - name: Set RENV_PATHS_ROOT and datetime
       shell: bash
       run: |
+        datetime=$(date -u +"%Y%m%dT%H%M%SZ")
+        echo "datetime=${datetime}" >> $GITHUB_ENV      
         echo "RENV_PATHS_ROOT=${{ runner.temp }}/renv" >> $GITHUB_ENV
     - name: Install and activate renv
       run: |
@@ -43,33 +43,17 @@ jobs:
     - name: Install R packages (or pull from cache)
       run:  install.packages(c("httr", "ggplot2", "jsonlite", "data.table"));
       shell: Rscript {0}
-    - name: Cache data files
-      uses: actions/cache/restore@v4
-      with:
-        path: |
-          demanda_diaria_Edesur.txt
-          demanda_diaria_GBA.txt
-        key: ${{ runner.os }}-data
-#       key: ${{ runner.os }}-data-${{ hashFiles('demanda_diaria_Edesur.txt', 'demanda_diaria_GBA.txt') }}
-        restore-keys: ${{ runner.os }}-data
     - name: Run R script
       run: |
         Rscript demanda_diaria_API_MEM.R
-    - name: Cache updated data files
-      uses: actions/cache/save@v4
-      with:
-        path: |
-          demanda_diaria_Edesur.txt
-          demanda_diaria_GBA.txt
-#        key: ${{ runner.os }}-data-${{ hashFiles('demanda_diaria_Edesur.txt', 'demanda_diaria_GBA.txt') }}
-        key: ${{ runner.os }}-data
+    - name: commit updated data files
+      run: |
+        git add demanda_diaria_Edesur.txt demanda_diaria_GBA.txt
+        git commit -m 'Actions run_id=${{ github.run_id }}, dt=${{ env.datetime }}
     - name: Save plot
       run: |
-        datetime=$(date -u +"%Y%m%dT%H%M%SZ")
-        mv demanda_diaria.svg demanda_diaria_${datetime}.svg
-        echo "datetime=${datetime}" >> $GITHUB_ENV
-        echo "Plot saved as demanda_diaria_${datetime}.svg"
-        
+        mv demanda_diaria.svg demanda_diaria_${{ env.datetime }}.svg
+        echo "Plot saved as demanda_diaria_${{ env.datetime }}.svg"
     - name: Upload plot as artifact
       uses: actions/upload-artifact@v4
       with:

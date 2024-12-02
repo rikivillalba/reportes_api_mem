@@ -49,7 +49,7 @@ jobs:
     - name: commit updated data files
       run: |
         git add demanda_diaria_Edesur.txt demanda_diaria_GBA.txt
-        git commit -m 'Actions run_id=${{ github.run_id }}, dt=${{ env.datetime }}
+        git commit -m 'Actions run_id=${{ github.run_id }}, dt=${{ env.datetime }}'
     - name: Save plot
       run: |
         mv demanda_diaria.svg demanda_diaria_${{ env.datetime }}.svg

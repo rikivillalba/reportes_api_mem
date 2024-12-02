@@ -44,9 +44,6 @@ normalizar_nombre <- function(nombre) {
 # ---- apiCalls ----
 ## esta API utiliza fechas en formato simple sin tiempo
 # tz <- "Etc/GMT"
-  # NOTA: data.table usa el formato ISO que viene del request y es
-  # capaz de leerlo correctamente (aunque lo muestra en UTC). Por lo tanto
-  # no es necesario hacer ninguna transformación a datetime.
 DemandaYTemperaturaRegionByFecha <- function(fecha = Sys.Date(), id_region) {
   withRetries(5, {
     message("Obteniendo fecha:", as.Date(fecha), ", id_region: ", id_region)
@@ -54,7 +51,9 @@ DemandaYTemperaturaRegionByFecha <- function(fecha = Sys.Date(), id_region) {
       "ObtieneDemandaYTemperaturaRegionByFecha",
       fecha = strftime(fecha, "%Y-%m-%d"),
       id_region = id_region)
-    jsonlite::fromJSON(url)
+    data <- data.table::as.data.table(jsonlite::fromJSON(url))
+    data[, fecha := as.POSIXct(
+      fecha, format = "%Y-%m-%dT%H:%M:%OS%z", tz = "UTC")][]
   })
 }
 
@@ -126,7 +125,7 @@ completarSOTR <- function(regiones, fecha = Sys.Date()) {
           colClasses = .csvdefs[["demanda_diaria"]]
         )
         data.table::setorder(old_data, fecha, fecha_consulta)
-        desde <- old_data[.N, as.Date(fecha)]
+        desde <- old_data[.N, as.Date(fecha, tz = "America/Buenos_Aires")]
         hasta <- fecha
         if (hasta < desde) {
           stop(gettextf(
@@ -140,10 +139,10 @@ completarSOTR <- function(regiones, fecha = Sys.Date()) {
           lapply(fechas, DemandaYTemperaturaRegionByFecha, id_region = id_region)
         )
         new_data[, fecha_consulta := hasta]
-        new_data[, fecha := as.POSIXct(fecha, format = "%Y-%m-%dT%H:%M:%OS%z")]
-        data.table::setorder(new_data, fecha)
+        data.table::setorder(new_data, fecha, fecha_consulta)
+        # borra duplicados de la historia deja sólo última fecha_consulta
         all_data <- unique(
-          by = c("fecha", "fecha_consulta"), fromLast = TRUE,
+          by = c("fecha"), fromLast = TRUE,
           rbind(old_data, new_data[, .SD, .SDcols = intersect(
             colnames(old_data), colnames(new_data)
           )], fill = TRUE)
@@ -163,7 +162,7 @@ completarSOTR <- function(regiones, fecha = Sys.Date()) {
 
 compilarSOTR <- function() {
   stop("en mantenimiento")
-  folder <- "C:\\Users\\ar30592993\\OneDrive - Enel Spa\\cammesa\\demanda_diaria\\REST"
+  #  folder <- "C:\\Users\\ar30592993\\OneDrive - Enel Spa\\cammesa\\demanda_diaria\\REST"
   region <- request.region()
 
   data <- lapply(region$id, \(id_region){
@@ -325,10 +324,10 @@ if (F) {
 # ---- Gráfico de demandas diarias ----
 
 #if (FALSE) {
-
-demandasGBA <- obtenerDemandasGBA()
-svg("demanda_diaria.svg", width = 12)
-plot(demandasGBA)
-dev.off()
-
+{
+  demandasGBA <- obtenerDemandasGBA()
+  svg("demanda_diaria.svg", width = 12)
+  plot(demandasGBA)
+  dev.off()
+}
 

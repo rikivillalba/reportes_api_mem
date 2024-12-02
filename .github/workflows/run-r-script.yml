@@ -48,8 +48,11 @@ jobs:
         Rscript demanda_diaria_API_MEM.R
     - name: commit updated data files
       run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "${{ user.id }}+${{ user.login }}@users.noreply.github.com"
         git add demanda_diaria_Edesur.txt demanda_diaria_GBA.txt
-        git commit -m 'Actions run_id=${{ github.run_id }}, dt=${{ env.datetime }}'
+        git commit -m "Actions run_id=${{ github.run_id }}, dt=${{ env.datetime }}"
+        gut push
     - name: Save plot
       run: |
         mv demanda_diaria.svg demanda_diaria_${{ env.datetime }}.svg

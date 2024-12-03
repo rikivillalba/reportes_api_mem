@@ -2,7 +2,7 @@ name: Run R Script (commit action)
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Runs daily at midnight
+    - cron: '20 15 * * *'  # Runs daily at midnight
   workflow_dispatch:
   
 jobs:

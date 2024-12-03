@@ -44,6 +44,7 @@ normalizar_nombre <- function(nombre) {
 # ---- apiCalls ----
 ## esta API utiliza fechas en formato simple sin tiempo
 # tz <- "Etc/GMT"
+# Normalmente devuelve {fecha, dem} o {fecha, dem, temp]
 DemandaYTemperaturaRegionByFecha <- function(fecha = Sys.Date(), id_region) {
   withRetries(5, {
     message("Obteniendo fecha:", as.Date(fecha), ", id_region: ", id_region)
@@ -52,8 +53,10 @@ DemandaYTemperaturaRegionByFecha <- function(fecha = Sys.Date(), id_region) {
       fecha = strftime(fecha, "%Y-%m-%d"),
       id_region = id_region)
     data <- data.table::as.data.table(jsonlite::fromJSON(url))
-    data[, fecha := as.POSIXct(
-      fecha, format = "%Y-%m-%dT%H:%M:%OS%z", tz = "UTC")][]
+    if (NROW(data) > 0) 
+      data[, fecha := as.POSIXct(
+        fecha, format = "%Y-%m-%dT%H:%M:%OS%z", tz = "UTC")][]
+    else data.table::data.table()
   })
 }
 

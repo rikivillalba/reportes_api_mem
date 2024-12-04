@@ -1,0 +1,21 @@
+name: Run R Script (commit action)
+
+on:
+  workflow_dispatch:
+  
+jobs:
+  run-r-script:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set up R
+      uses: r-lib/actions/setup-r@v2
+      with:
+        r-version: '4.1.0'  # Specify the R version you need
+    - name: Get R and OS version
+      run: |
+        cat(sprintf("OS_VERSION=%s\n", sessionInfo()$running), append=TRUE, file=Sys.getenv("GITHUB_ENV"));
+        cat(sprintf("R_VERSION=%s\n", R.Version()$version.string), append=TRUE, file=Sys.getenv("GITHUB_ENV")); 
+      shell: Rscript {0}
+    - name: Run R script
+      run: |
+        Rscript 'as.POSIXct(as.POSIXct(c("2007-12-30 02:00:00", "2007-12-30 03:00:00"), tz = "UTC"), tz = "America/Buenos_aires")'

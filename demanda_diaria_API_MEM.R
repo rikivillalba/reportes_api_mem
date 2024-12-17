@@ -3,11 +3,22 @@
 # Autor: Ricardo Villalba
 #
 
+
 #---- auxiliar ----
 
 .csvdefs <- local({
   
   demanda_diaria <- c(
+    fecha = "POSIXct", dem = "integer",
+    temp = "numeric", fecha_consulta = "Date"
+  )
+  
+  demanda_diaria_Edesur.txt <- c(
+    fecha = "POSIXct", dem = "integer",
+    fecha_consulta = "Date"
+  )
+  
+  demanda_diaria_GBA.txt <- c(
     fecha = "POSIXct", dem = "integer",
     temp = "numeric", fecha_consulta = "Date"
   )
@@ -123,7 +134,7 @@ completarSOTR <- function(regiones, fecha = Sys.Date()) {
       } else {
         old_data <- data.table::fread(
           file = fname,
-          colClasses = .csvdefs[["demanda_diaria"]]
+          colClasses = .csvdefs[[fname]] %||% .csvdefs[["demanda_diaria"]]
         )
         data.table::setorder(old_data, fecha, fecha_consulta)
         desde <- old_data[.N, as.Date(fecha, tz = "America/Buenos_Aires")]
@@ -139,15 +150,20 @@ completarSOTR <- function(regiones, fecha = Sys.Date()) {
         new_data <- data.table::rbindlist(
           lapply(fechas, DemandaYTemperaturaRegionByFecha, id_region = id_region)
         )
+        match_cols = intersect(colnames(old_data), colnames(new_data))
+        message("Combinando en ", paste(match_cols, collapse = ", "))
         new_data[, fecha_consulta := hasta]
-        data.table::setorder(new_data, fecha, fecha_consulta)
+        
+        # si los datos coinciden exactamente, no se actualizan (notar 
+        # que con en all_data se usa setkey, que por default es na.last == F
+        new_data[old_data, on = match_cols, fecha_consulta := as.Date(NA)]
+        
         # borra duplicados de la historia deja sólo última fecha_consulta
         all_data <- unique(
-          by = c("fecha"), fromLast = TRUE,
-          rbind(old_data, new_data[, .SD, .SDcols = intersect(
-            colnames(old_data), colnames(new_data)
-          )], fill = TRUE)
-        )
+          by = c("fecha"), fromLast = TRUE, setkeyv(
+            rbind(old_data, new_data, fill = TRUE), 
+            c("fecha", "fecha_consulta"))
+        )[,.SD, .SDcols = c(match_cols, "fecha_consulta")]
 
         # chequear completitud de la serie
         # tolerancia de 1 punto de dato de 15 (300 seg) minutos faltante
@@ -220,12 +236,14 @@ compilarSOTR <- function() {
 
 obtenerDemandasGBA <- function(ndias = 15, completar = TRUE) {
   if (completar) completarSOTR(c(426, 1078))
+  fname <- "demanda_diaria_GBA.txt"
+  fname.eds <- "demanda_diaria_Edesur.txt"
   dem <- data.table::fread(
-    file = "demanda_diaria_GBA.txt", 
-    colClasses = .csvdefs[["demanda_diaria"]])
+    file = fname,
+    colClasses = .csvdefs[[fname]] %||% .csvdefs[["demanda_diaria"]])
   dem.eds <- data.table::fread(
-    file = "demanda_diaria_Edesur.txt",
-    colClasses = .csvdefs[["demanda_diaria"]])
+    file = fname.eds,
+    colClasses = .csvdefs[[fname.eds]] %||% .csvdefs[["demanda_diaria"]])
   dem[dem.eds, on = "fecha", eds := i.dem]
   # es buena idea esto?
   data.table::setattr(dem$fecha, "tzone", "America/Buenos_Aires")
@@ -328,7 +346,7 @@ if (F) {
 
 # ---- Gráfico de demandas diarias ----
 
-if (FALSE) 
+#if (FALSE) {
 {
   demandasGBA <- obtenerDemandasGBA()
   svg("demanda_diaria.svg", width = 12)

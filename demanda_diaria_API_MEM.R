@@ -2,8 +2,6 @@
 #
 # Autor: Ricardo Villalba
 #
-# Una fu
-
 
 #---- auxiliar ----
 
@@ -330,7 +328,7 @@ if (F) {
 
 # ---- Gráfico de demandas diarias ----
 
-#if (FALSE) {
+if (FALSE) 
 {
   demandasGBA <- obtenerDemandasGBA()
   svg("demanda_diaria.svg", width = 12)

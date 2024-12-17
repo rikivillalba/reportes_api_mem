@@ -9,7 +9,7 @@ jobs:
   run-r-script:
     permissions:
       contents: write
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
     - name: Checkout repository
       # Esta acción también descarga demanda_diaria_GBA.txt y demanda_diaria_Edesur.txt del repo.

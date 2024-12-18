@@ -11,6 +11,9 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
+    - name: prueba
+      run: |
+        [ 1 -eq 2 ] ; echo $?
     - name: Checkout repository
       # Esta acción también descarga demanda_diaria_GBA.txt y demanda_diaria_Edesur.txt del repo.
       uses: actions/checkout@v3
@@ -53,8 +56,7 @@ jobs:
         git config user.name "github-actions[bot]"
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git add demanda_diaria_Edesur.txt demanda_diaria_GBA.txt
-        git diff-index --quiet HEAD
-        echo "must_commit=$?" >> $GITHUB_ENV
+        git diff-index --quiet HEAD ; echo "must_commit=$?" >> $GITHUB_ENV
       #   ^ https://stackoverflow.com/questions/8123674/how-to-git-commit-nothing-without-an-error
     - name: commit and push if any change     
       if: env.must_commit != '0'

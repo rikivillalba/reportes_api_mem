@@ -11,9 +11,6 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
-    - name: prueba
-      run: |
-        if [ 1 -eq 2 ] ; then echo $? ; fi   
     - name: Checkout repository
       # Esta acción también descarga demanda_diaria_GBA.txt y demanda_diaria_Edesur.txt del repo.
       uses: actions/checkout@v3

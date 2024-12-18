@@ -162,7 +162,7 @@ completarSOTR <- function(regiones, fecha = Sys.Date()) {
         
         # borra duplicados de la historia deja sólo última fecha_consulta
         all_data <- unique(
-          by = c("fecha"), fromLast = TRUE, setkeyv(
+          by = c("fecha"), fromLast = TRUE, data.table::setkeyv(
             rbind(old_data, new_data, fill = TRUE), 
             c("fecha", "fecha_consulta"))
         )[,.SD, .SDcols = c(match_cols, "fecha_consulta")]

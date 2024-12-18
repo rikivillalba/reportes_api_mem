@@ -6,6 +6,8 @@
 
 #---- auxiliar ----
 
+`%||%` <- function (x, y) if (is.null(x)) y else x
+
 .csvdefs <- local({
   
   demanda_diaria <- c(

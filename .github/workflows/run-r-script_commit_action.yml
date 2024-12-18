@@ -13,7 +13,7 @@ jobs:
     steps:
     - name: prueba
       run: |
-        [ 1 -eq 2 ] ; echo $?
+        if [ 1 -eq 2 ] ; then echo $? ; fi   
     - name: Checkout repository
       # Esta acción también descarga demanda_diaria_GBA.txt y demanda_diaria_Edesur.txt del repo.
       uses: actions/checkout@v3

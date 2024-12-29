@@ -1,9 +1,9 @@
-name: Run R Script (commit action)
+name: Demanda diaria (alt)
 
 on:
   workflow_dispatch: 
-  schedule:
-    - cron: '20 15 * * *'  # Runs daily at midnight
+#  schedule:
+#    - cron: '20 15 * * *'  # Runs daily at midnight
   
 jobs:
   run-r-script:
@@ -14,31 +14,18 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
+    - run: sudo apt-get update && sudo apt-get install -qq r-base
     - name: Set up R
       uses: r-lib/actions/setup-r@v2
       with:
-        r-version: '4.1.0'                           # Specify the R version you need
+        install-r: false
+#        r-version: '4.1.0'                           # Specify the R version you need
+    - uses: r-lib/actions/setup-renv@v2
     - name: Set environment variables
       shell: bash
       run: |
         datetime=$(date -u +"%Y%m%dT%H%M%SZ")
         echo "datetime=${datetime}" >> $GITHUB_ENV      
-        echo "RENV_PATHS_ROOT=${{ runner.temp }}/renv" >> $GITHUB_ENV
-        echo "OS_VERSION=$(Rscript -e 'cat(sessionInfo()$running)')" >> $GITHUB_ENV
-        echo "R_VERSION=$(Rscript -e 'cat(R.Version()$version.string)')" >> $GITHUB_ENV
-    - name: Restore Renv package cache
-      uses: actions/cache@v4
-      with:
-        path: ${{ env.RENV_PATHS_ROOT }}
-        key: ${{ env.OS_VERSION }}-${{ env.R_VERSION }}-${{ inputs.cache-version }}-${{ hashFiles('renv.lock') }}
-        restore-keys: ${{ env.OS_VERSION }}-${{ env.R_VERSION }}-${{ inputs.cache-version }}-
-    - name: Install and activate renv and dependencies.
-      shell: Rscript {0}
-      run: |
-        install.packages("renv")
-        renv::activate()
-        if (!renv::status()$synchronized) renv::snapshot()
-        install.packages(c("ggplot2", "jsonlite", "data.table"));
     - name: Checkout repository
       uses: actions/checkout@v3
       # ^ Esta acción también descarga demanda_diaria_GBA.txt y demanda_diaria_Edesur.txt del repo.

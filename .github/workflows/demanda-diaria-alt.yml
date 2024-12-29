@@ -1,9 +1,9 @@
-name: Run R Script (commit action)
+name: Demanda diaria (alt)
 
 on:
   workflow_dispatch: 
-  schedule:
-    - cron: '20 15 * * *'  # Runs daily at midnight
+#  schedule:
+#    - cron: '20 15 * * *'  # Runs daily at midnight
   
 jobs:
   run-r-script:
@@ -14,47 +14,31 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
-    - name: Install deps
-      run: |
-        sudo apt-get update && sudo apt-get install libcurl4-openssl-dev
+    - run: sudo apt-get update && sudo apt-get install -qq r-base
     - name: Set up R
       uses: r-lib/actions/setup-r@v2
       with:
-        r-version: '4.1.0'                           # Specify the R version you need
+        install-r: false
+#        r-version: '4.1.0'                           # Specify the R version you need
+    - uses: r-lib/actions/setup-renv@v2
     - name: Set environment variables
       shell: bash
       run: |
         datetime=$(date -u +"%Y%m%dT%H%M%SZ")
         echo "datetime=${datetime}" >> $GITHUB_ENV      
-        echo "RENV_PATHS_ROOT=${{ runner.temp }}/renv" >> $GITHUB_ENV
-        echo "OS_VERSION=$(Rscript -e 'cat(sessionInfo()$running)')" >> $GITHUB_ENV
-        echo "R_VERSION=$(Rscript -e 'cat(R.Version()$version.string)')" >> $GITHUB_ENV
-    - name: Restore Renv package cache
-      uses: actions/cache@v4
-      with:
-        path: ${{ env.RENV_PATHS_ROOT }}
-        key: ${{ env.OS_VERSION }}-${{ env.R_VERSION }}-${{ inputs.cache-version }}-${{ hashFiles('renv.lock') }}
-        restore-keys: ${{ env.OS_VERSION }}-${{ env.R_VERSION }}-${{ inputs.cache-version }}-
-    - name: Install and activate renv and dependencies.
-      shell: Rscript {0}
-      run: |
-        install.packages("renv")
-        renv::activate()
-        if (!renv::status()$synchronized) renv::snapshot()
-        install.packages(c("httr", "ggplot2", "jsonlite", "data.table"));
     - name: Checkout repository
       uses: actions/checkout@v3
       # ^ Esta acción también descarga demanda_diaria_GBA.txt y demanda_diaria_Edesur.txt del repo.
     - name: Run R script and save plot
       run: |
         Rscript demanda_diaria_API_MEM.R    
-        mv demanda_diaria.svg demanda_diaria_${{ env.datetime }}.svg
+        mv demanda_diaria.png demanda_diaria_${{ env.datetime }}.png
     - name: Upload plot as artifact
       id: upload-plot-artifact
       uses: actions/upload-artifact@v4
       with:
         name: ${{ github.run_id }}_demanda_diaria_${{ env.datetime }}
-        path: demanda_diaria_${{ env.datetime }}.svg
+        path: demanda_diaria_${{ env.datetime }}.png
     - name: add updated data files
       run: |
         git config user.name "github-actions[bot]"
@@ -90,11 +74,11 @@ jobs:
             Informe de demanda diaria
             Fecha de ejecución: ${{ env.datetime }}
             [descargar zip artifact](${{ env.artifact-url }})
-            ![plot](./demanda_diaria_${{ env.datetime }}.svg)
+            ![plot](./demanda_diaria_${{ env.datetime }}.png)
           # Dirección obtenida para grupo de teams
           to: 7fd2381b.enelcom.onmicrosoft.com@emea.teams.ms
           from: GitHub Actions <noreply@github.com>
-          attachments: demanda_diaria_${{ env.datetime }}.svg
+          attachments: demanda_diaria_${{ env.datetime }}.png
           security: strict
            
    

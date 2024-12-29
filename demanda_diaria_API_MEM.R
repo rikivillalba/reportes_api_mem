@@ -39,9 +39,9 @@ withRetries<- function(n, expr) {
 }
 
 make_API_URL <- function(.method, .domain = "demanda-svc/demanda/", ...) {
-  httr::build_url(within.list(
-    httr::parse_url(paste0("https://api.cammesa.com/", .domain, .method)),
-    query <- list(...)))
+  paste0(
+    "https://api.cammesa.com/", .domain, .method,
+    "?", paste0(URLencode(...names()), "=", URLencode(c(...)), collapse = "&"))
 }
 
 normalizar_nombre <- function(nombre) {
@@ -313,26 +313,15 @@ plot.DemandasGBA <- function(x) {
 
 
 #---- Consulta de agentes ----
-if (F) {
-  url <- httr::build_url(within.list(
-    httr::parse_url("https://api.cammesa.com/demanda-svc/demanda/Agentes"),
-    query <- NULL
-  ))
-
-  withCallingHandlers(
-    error = tryInvokeRestart("retry"),
-    {
-      agente.data <- httr::content(httr::GET(url))
-      # agente <- jsonlite::fromJSON(url)
-    }
-  )
-
-  setDT(agente)
-  # agente_samples <- agente[sapply(
-  #     agente[, unique(tagNemo)], \(x) sample(size = 1, agente[, which(tagNemo == x)]))]
-
-  distrib <- agente[tagNemo == "DI"]
-}
+# if (F) {
+#   url <- "https://api.cammesa.com/demanda-svc/demanda/Agentes"
+# 
+#   withRetries(5, agente.data <- httr::content(httr::GET(url)))
+# 
+#   setDT(agente)
+# 
+#   distrib <- agente[tagNemo == "DI"]
+# }
 # 
 # 
 # # ---- completar demandas sotr ----
@@ -348,10 +337,10 @@ if (F) {
 
 # ---- Gráfico de demandas diarias ----
 
-#if (FALSE) {
 {
   demandasGBA <- obtenerDemandasGBA()
-  svg("demanda_diaria.svg", width = 12)
+#  svg("demanda_diaria.svg", width = 12)
+  png("demanda_diaria.png", width = 12)
   print(plot(demandasGBA))
   dev.off()
   invisible()

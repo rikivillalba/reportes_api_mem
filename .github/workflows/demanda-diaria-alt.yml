@@ -51,12 +51,12 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: ${{ github.run_id }}_demanda_diaria_${{ env.datetime }}
-      - name: Convert image to base64
-        id: base64_image
-        run: |
-          BASE64_IMAGE=$(base64 -w 0 demanda_diaria_${{ env.datetime }}.png)
-          # Store in step outputs, escaping the content
-          echo "base64_content=$BASE64_IMAGE" >> $GITHUB_OUTPUT
+     # - name: Convert image to base64
+     #   id: base64_image
+     #   run: |
+     #     BASE64_IMAGE=$(base64 -w 0 demanda_diaria_${{ env.datetime }}.png)
+     #     # Store in step outputs, escaping the content
+     #     echo "base64_content=$BASE64_IMAGE" >> $GITHUB_OUTPUT
       - name: Send email
         uses: dawidd6/action-send-mail@v3
         with:
@@ -70,12 +70,13 @@ jobs:
             
             Fecha de ejecución: ${{ env.datetime }}
             
-            ![Chart](data:image/png;base64,${{ steps.base64_image.outputs.base64_content }})
+            ![Chart](cid:demanda_diaria_${{ env.datetime }}.png)
 
             ---
 
             *Email generado en forma automática            
           # Dirección obtenida para grupo de teams
+          attachments: demanda_diaria_${{ env.datetime }}.png
           to: 7fd2381b.enelcom.onmicrosoft.com@emea.teams.ms
           from: Ricardo via GitHub Actions <noreply@github.com>
 

@@ -66,15 +66,11 @@ jobs:
           password: ${{ secrets.EMAIL_PASSWORD }}
           subject: GitHub Actions Notification
           html_body: | 
-            ### Informe de demanda diaria
-            
-            Fecha de ejecución: ${{ env.datetime }}
-            
-            ![Chart](cid:demanda_diaria_${{ env.datetime }}.png)
-
-            ---
-
-            *Email generado en forma automática            
+            <h3 id="informe-de-demanda-diaria">Informe de demanda diaria</h3>
+            <p>Fecha de ejecución: ${{ env.datetime }}</p>
+            <p><img src="cid:demanda_diaria_${{ env.datetime }}.png" alt="Chart" /></p>
+            <hr />
+            <p>Email generado en forma automática</p>
           # Dirección obtenida para grupo de teams
           attachments: demanda_diaria_${{ env.datetime }}.png
           to: 7fd2381b.enelcom.onmicrosoft.com@emea.teams.ms

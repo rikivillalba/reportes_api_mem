@@ -14,18 +14,15 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - run: echo "datetime=$(date -u +'%Y%m%dT%H%M%SZ')" >> $GITHUB_ENV      
     - run: sudo apt-get update && sudo apt-get install -qq r-base
     - uses: r-lib/actions/setup-r@v2
-      with:
-        install-r: false
+      with:                 # esto debería ser más rápido además la imagen de ubuntu
+        install-r: false    # usa el repo de https://cloud.r-project.org/bin/linux/ubuntu/
     - uses: r-lib/actions/setup-renv@v2
-    - run: |
-        echo "datetime=$(date -u +'%Y%m%dT%H%M%SZ')" >> $GITHUB_ENV      
-    - name: Run R script and save plot
-      run: |
-        Rscript demanda_diaria_API_MEM.R    
-        mv demanda_diaria.png demanda_diaria_${{ env.datetime }}.png
+    - uses: actions/checkout@v3      # baja script, demanda_diaria*.txt y renv.lock
+    - run: Rscript demanda_diaria_API_MEM.R    
+    - run: mv demanda_diaria.png demanda_diaria_${{ env.datetime }}.png
     - id: upload-plot-artifact
       uses: actions/upload-artifact@v4
       with:
@@ -54,7 +51,13 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: ${{ github.run_id }}_demanda_diaria_${{ env.datetime }}
-      - name: Send email (GitHub Actions)
+      - name: Convert image to base64
+        id: base64_image
+        run: |
+          BASE64_IMAGE=$(base64 -w 0 demanda_diaria_${{ env.datetime }}.png)
+          # Store in step outputs, escaping the content
+          echo "base64_content=$BASE64_IMAGE" >> $GITHUB_OUTPUT
+      - name: Send email
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
@@ -63,11 +66,16 @@ jobs:
           password: ${{ secrets.EMAIL_PASSWORD }}
           subject: GitHub Actions Notification
           html_body: | 
-            Informe de demanda diaria
+            ### Informe de demanda diaria
+            
             Fecha de ejecución: ${{ env.datetime }}
-            ![plot](./demanda_diaria_${{ env.datetime }}.png)
+            
+            ![Chart](data:image/png;base64,${{ steps.base64_image.outputs.base64_content }})
+
+            ---
+
+            *Email generado en forma automática            
           # Dirección obtenida para grupo de teams
           to: 7fd2381b.enelcom.onmicrosoft.com@emea.teams.ms
           from: Ricardo via GitHub Actions <noreply@github.com>
-          attachments: demanda_diaria_${{ env.datetime }}.png
-           
+

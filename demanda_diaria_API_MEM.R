@@ -340,7 +340,7 @@ plot.DemandasGBA <- function(x) {
 {
   demandasGBA <- obtenerDemandasGBA()
 #  svg("demanda_diaria.svg", width = 12)
-  png("demanda_diaria.png", width = 12)
+  png("demanda_diaria.png", width = 1280, height = 720)
   print(plot(demandasGBA))
   dev.off()
   invisible()

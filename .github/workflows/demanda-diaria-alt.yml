@@ -68,7 +68,6 @@ jobs:
             ![plot](./demanda_diaria_${{ env.datetime }}.png)
           # Dirección obtenida para grupo de teams
           to: 7fd2381b.enelcom.onmicrosoft.com@emea.teams.ms
-#          from: GitHub Actions <noreply@github.com>
+          from: Ricardo via GitHub Actions <noreply@github.com>
           attachments: demanda_diaria_${{ env.datetime }}.png
            
-   

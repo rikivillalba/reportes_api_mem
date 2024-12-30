@@ -2,8 +2,8 @@ name: Demanda diaria (alt)
 
 on:
   workflow_dispatch: 
-#  schedule:
-#    - cron: '20 15 * * *'  # Runs daily at midnight
+  schedule:
+    - cron: '20 18 * * *'  # Runs daily at midnight
   
 jobs:
   run-r-script:

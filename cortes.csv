@@ -1,0 +1,289 @@
+hora,EDN,EDS,algo,clima,temp,UTCtime
+17:25,1242,2232,03d,Nubes Dispersas,27,%Y-%m-%dT%H:%M:%OSZ
+17:30,1242,2232,03d,Nubes Dispersas,27,%Y-%m-%dT%H:%M:%OSZ
+17:35,1242,2232,02d,Algo De Nubes,27,%Y-%m-%dT%H:%M:%OSZ
+17:40,1242,1006,02d,Algo De Nubes,27,%Y-%m-%dT%H:%M:%OSZ
+17:45,1242,1006,02d,Algo De Nubes,27,%Y-%m-%dT%H:%M:%OSZ
+17:50,1242,1006,02d,Algo De Nubes,27,%Y-%m-%dT%H:%M:%OSZ
+17:55,681,1007,02d,Algo De Nubes,27,%Y-%m-%dT%H:%M:%OSZ
+18:00,681,1007,02d,Algo De Nubes,27,%Y-%m-%dT%H:%M:%OSZ
+18:05,681,1007,02d,Algo De Nubes,27,%Y-%m-%dT%H:%M:%OSZ
+18:10,684,967,02d,Algo De Nubes,27,%Y-%m-%dT%H:%M:%OSZ
+18:15,684,967,02d,Algo De Nubes,27,%Y-%m-%dT%H:%M:%OSZ
+18:20,684,967,01d,Cielo Claro,27,%Y-%m-%dT%H:%M:%OSZ
+18:25,685,996,01d,Cielo Claro,27,%Y-%m-%dT%H:%M:%OSZ
+18:30,685,996,01d,Cielo Claro,27,%Y-%m-%dT%H:%M:%OSZ
+18:35,685,996,01d,Cielo Claro,27,%Y-%m-%dT%H:%M:%OSZ
+18:40,687,3216,01d,Cielo Claro,27,%Y-%m-%dT%H:%M:%OSZ
+18:45,687,3216,02d,Algo De Nubes,26,%Y-%m-%dT%H:%M:%OSZ
+18:50,687,3216,01d,Cielo Claro,26,%Y-%m-%dT%H:%M:%OSZ
+18:55,696,3216,01d,Cielo Claro,26,%Y-%m-%dT%H:%M:%OSZ
+19:00,696,3216,01d,Cielo Claro,26,%Y-%m-%dT%H:%M:%OSZ
+19:05,696,3216,01d,Cielo Claro,26,%Y-%m-%dT%H:%M:%OSZ
+19:10,730,3135,02d,Algo De Nubes,26,%Y-%m-%dT%H:%M:%OSZ
+19:15,730,3135,02d,Algo De Nubes,26,%Y-%m-%dT%H:%M:%OSZ
+19:20,730,3135,02d,Algo De Nubes,26,%Y-%m-%dT%H:%M:%OSZ
+19:25,527,3130,02d,Algo De Nubes,26,%Y-%m-%dT%H:%M:%OSZ
+19:30,527,3130,01d,Cielo Claro,25,%Y-%m-%dT%H:%M:%OSZ
+19:35,527,3130,01d,Cielo Claro,25,%Y-%m-%dT%H:%M:%OSZ
+19:40,527,3130,01d,Cielo Claro,24,%Y-%m-%dT%H:%M:%OSZ
+19:45,543,3978,01d,Cielo Claro,24,%Y-%m-%dT%H:%M:%OSZ
+19:50,543,3978,01d,Cielo Claro,24,%Y-%m-%dT%H:%M:%OSZ
+19:55,543,3978,01d,Cielo Claro,24,%Y-%m-%dT%H:%M:%OSZ
+20:00,495,2811,01d,Cielo Claro,24,%Y-%m-%dT%H:%M:%OSZ
+20:05,495,2811,01d,Cielo Claro,24,%Y-%m-%dT%H:%M:%OSZ
+20:10,495,2811,02d,Algo De Nubes,24,%Y-%m-%dT%H:%M:%OSZ
+20:15,504,2811,02d,Algo De Nubes,24,%Y-%m-%dT%H:%M:%OSZ
+20:20,504,2811,01n,Cielo Claro,23,%Y-%m-%dT%H:%M:%OSZ
+20:25,504,2811,01n,Cielo Claro,23,%Y-%m-%dT%H:%M:%OSZ
+20:30,507,371,01n,Cielo Claro,23,%Y-%m-%dT%H:%M:%OSZ
+20:35,507,371,01n,Cielo Claro,23,%Y-%m-%dT%H:%M:%OSZ
+20:40,507,371,01n,Cielo Claro,23,%Y-%m-%dT%H:%M:%OSZ
+20:45,112,364,01n,Cielo Claro,23,%Y-%m-%dT%H:%M:%OSZ
+20:50,112,364,01n,Cielo Claro,23,%Y-%m-%dT%H:%M:%OSZ
+20:55,112,364,01n,Cielo Claro,23,%Y-%m-%dT%H:%M:%OSZ
+21:00,121,332,01n,Cielo Claro,23,%Y-%m-%dT%H:%M:%OSZ
+21:05,121,332,01n,Cielo Claro,23,%Y-%m-%dT%H:%M:%OSZ
+21:10,121,332,01n,Cielo Claro,23,%Y-%m-%dT%H:%M:%OSZ
+21:15,122,332,02n,Algo De Nubes,23,%Y-%m-%dT%H:%M:%OSZ
+21:20,122,332,01n,Cielo Claro,23,%Y-%m-%dT%H:%M:%OSZ
+21:25,122,332,01n,Cielo Claro,23,%Y-%m-%dT%H:%M:%OSZ
+21:30,125,332,01n,Cielo Claro,23,%Y-%m-%dT%H:%M:%OSZ
+21:35,125,332,01n,Cielo Claro,23,%Y-%m-%dT%H:%M:%OSZ
+21:40,125,332,01n,Cielo Claro,23,%Y-%m-%dT%H:%M:%OSZ
+21:45,102,344,01n,Cielo Claro,23,%Y-%m-%dT%H:%M:%OSZ
+21:50,102,344,01n,Cielo Claro,23,%Y-%m-%dT%H:%M:%OSZ
+21:55,102,344,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+22:00,102,344,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+22:05,103,365,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+22:10,103,365,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+22:15,103,365,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+22:20,111,365,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+22:25,111,365,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+22:30,111,365,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+22:35,110,376,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+22:40,110,376,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+22:45,110,376,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+22:50,510,386,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+22:55,510,386,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+23:00,510,386,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+23:05,506,418,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+23:10,506,418,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+23:15,506,418,02n,Algo De Nubes,22,%Y-%m-%dT%H:%M:%OSZ
+23:20,104,418,02n,Algo De Nubes,22,%Y-%m-%dT%H:%M:%OSZ
+23:25,104,418,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+23:30,104,418,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+23:35,111,426,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+23:40,111,426,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+23:45,111,426,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+23:50,111,426,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+23:55,111,426,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+00:00,111,426,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+00:05,111,415,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+00:10,111,415,03n,Nubes Dispersas,21,%Y-%m-%dT%H:%M:%OSZ
+00:15,111,415,03n,Nubes Dispersas,21,%Y-%m-%dT%H:%M:%OSZ
+00:20,111,415,03n,Nubes Dispersas,21,%Y-%m-%dT%H:%M:%OSZ
+00:25,111,407,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+00:30,111,407,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+00:35,111,407,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+00:40,112,406,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+00:45,112,406,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+00:50,112,406,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+00:55,113,1778,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+01:00,113,1778,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+01:05,113,1778,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+01:10,113,412,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+01:15,113,412,02n,Algo De Nubes,22,%Y-%m-%dT%H:%M:%OSZ
+01:20,113,412,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+01:25,113,412,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+01:30,113,412,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+01:35,113,412,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+01:40,113,412,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+01:45,113,412,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+01:50,113,412,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+01:55,113,240,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+02:00,113,240,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+02:05,113,240,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+02:10,120,240,01n,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+02:15,120,240,02n,Algo De Nubes,21,%Y-%m-%dT%H:%M:%OSZ
+02:20,120,240,02n,Algo De Nubes,21,%Y-%m-%dT%H:%M:%OSZ
+02:25,113,240,01n,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+02:30,113,240,01n,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+02:35,113,240,01n,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+02:40,113,240,01n,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+02:45,113,240,01n,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+02:50,113,240,01n,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+02:55,113,240,01n,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+03:00,114,240,01n,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+03:05,114,240,01n,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+03:10,114,240,02n,Algo De Nubes,21,%Y-%m-%dT%H:%M:%OSZ
+03:15,132,240,02n,Algo De Nubes,21,%Y-%m-%dT%H:%M:%OSZ
+03:20,132,240,01n,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+03:25,132,240,01n,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+03:30,132,89,01n,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+03:35,132,89,01n,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+03:40,132,89,01n,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+03:45,132,89,01n,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+03:50,132,89,01n,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+03:55,132,89,01n,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+04:00,132,72,01n,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+04:05,132,72,01n,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+04:10,132,72,01n,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+04:15,132,63,01n,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+04:20,132,63,01n,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+04:25,132,63,01n,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+04:30,132,58,01n,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+04:35,132,58,01n,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+04:40,132,58,01n,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+04:45,132,53,01n,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+04:50,132,53,01n,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+04:55,132,53,01n,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+05:00,132,53,01n,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+05:05,132,53,01n,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+05:10,132,53,01n,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+05:15,133,53,01n,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+05:20,133,53,01n,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+05:25,133,53,01n,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+05:30,153,53,01n,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+05:35,153,53,01n,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+05:40,153,53,01n,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+05:45,153,53,01n,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+05:50,153,53,01n,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+05:55,153,53,01d,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+06:00,153,53,01d,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+06:05,153,53,01d,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+06:10,153,53,01d,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+06:15,153,53,02d,Algo De Nubes,20,%Y-%m-%dT%H:%M:%OSZ
+06:20,92,74,02d,Algo De Nubes,20,%Y-%m-%dT%H:%M:%OSZ
+06:25,92,74,01d,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+06:30,92,74,01d,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+06:35,75,74,01d,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+06:40,75,74,01d,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+06:45,75,74,01d,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+06:50,75,2539,01d,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+06:55,75,2539,01d,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+07:00,75,2539,01d,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+07:05,75,2539,01d,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+07:10,75,2539,01d,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+07:15,75,2539,02d,Algo De Nubes,21,%Y-%m-%dT%H:%M:%OSZ
+07:20,77,7646,02d,Algo De Nubes,21,%Y-%m-%dT%H:%M:%OSZ
+07:25,77,7646,01d,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+07:30,77,7646,01d,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+07:35,77,496,01d,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+07:40,77,496,01d,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+07:45,77,496,01d,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+07:50,1858,796,01d,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+07:55,1858,796,01d,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+08:00,1858,796,01d,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+08:05,1860,786,01d,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+08:10,1860,786,01d,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+08:15,1860,786,03d,Nubes Dispersas,20,%Y-%m-%dT%H:%M:%OSZ
+08:20,1862,788,03d,Nubes Dispersas,20,%Y-%m-%dT%H:%M:%OSZ
+08:25,1862,788,01d,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+08:30,1862,788,01d,Cielo Claro,20,%Y-%m-%dT%H:%M:%OSZ
+08:35,1862,788,01d,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+08:40,1862,804,01d,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+08:45,1862,804,01d,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+08:50,1862,804,01d,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+08:55,1863,504,01d,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+09:00,1863,504,01d,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+09:05,1863,504,01d,Cielo Claro,21,%Y-%m-%dT%H:%M:%OSZ
+09:10,1252,1209,01d,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+09:15,1252,1209,01d,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+09:20,1252,1209,01d,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+09:25,1254,5229,01d,Cielo Claro,22,%Y-%m-%dT%H:%M:%OSZ
+09:30,1254,5229,01d,Cielo Claro,23,%Y-%m-%dT%H:%M:%OSZ
+09:35,1254,5229,01d,Cielo Claro,23,%Y-%m-%dT%H:%M:%OSZ
+09:40,1248,2143,01d,Cielo Claro,23,%Y-%m-%dT%H:%M:%OSZ
+09:45,1248,2143,01d,Cielo Claro,23,%Y-%m-%dT%H:%M:%OSZ
+09:50,1248,2143,01d,Cielo Claro,23,%Y-%m-%dT%H:%M:%OSZ
+09:55,1237,1753,01d,Cielo Claro,23,%Y-%m-%dT%H:%M:%OSZ
+10:00,1237,1753,01d,Cielo Claro,23,%Y-%m-%dT%H:%M:%OSZ
+10:05,1237,1753,01d,Cielo Claro,23,%Y-%m-%dT%H:%M:%OSZ
+10:10,1245,1745,01d,Cielo Claro,23,%Y-%m-%dT%H:%M:%OSZ
+10:15,1245,1745,01d,Cielo Claro,24,%Y-%m-%dT%H:%M:%OSZ
+10:20,1245,1745,01d,Cielo Claro,24,%Y-%m-%dT%H:%M:%OSZ
+10:25,1258,1748,01d,Cielo Claro,24,%Y-%m-%dT%H:%M:%OSZ
+10:30,1258,1748,01d,Cielo Claro,24,%Y-%m-%dT%H:%M:%OSZ
+10:35,1258,1748,01d,Cielo Claro,24,%Y-%m-%dT%H:%M:%OSZ
+10:40,1266,1746,01d,Cielo Claro,24,%Y-%m-%dT%H:%M:%OSZ
+10:45,1266,1746,01d,Cielo Claro,25,%Y-%m-%dT%H:%M:%OSZ
+10:50,1266,1746,01d,Cielo Claro,25,%Y-%m-%dT%H:%M:%OSZ
+10:55,1266,1620,01d,Cielo Claro,25,%Y-%m-%dT%H:%M:%OSZ
+11:00,1266,1620,01d,Cielo Claro,25,%Y-%m-%dT%H:%M:%OSZ
+11:05,1266,1620,01d,Cielo Claro,25,%Y-%m-%dT%H:%M:%OSZ
+11:10,1279,4869,01d,Cielo Claro,26,%Y-%m-%dT%H:%M:%OSZ
+11:15,1279,4869,01d,Cielo Claro,26,%Y-%m-%dT%H:%M:%OSZ
+11:20,1279,4869,01d,Cielo Claro,26,%Y-%m-%dT%H:%M:%OSZ
+11:25,1279,4856,01d,Cielo Claro,26,%Y-%m-%dT%H:%M:%OSZ
+11:30,1279,4856,01d,Cielo Claro,26,%Y-%m-%dT%H:%M:%OSZ
+11:35,1279,4856,01d,Cielo Claro,26,%Y-%m-%dT%H:%M:%OSZ
+11:40,1471,4856,01d,Cielo Claro,26,%Y-%m-%dT%H:%M:%OSZ
+11:45,1471,4856,01d,Cielo Claro,26,%Y-%m-%dT%H:%M:%OSZ
+11:50,1471,4856,01d,Cielo Claro,26,%Y-%m-%dT%H:%M:%OSZ
+11:55,1465,4568,01d,Cielo Claro,26,%Y-%m-%dT%H:%M:%OSZ
+12:00,1465,4568,01d,Cielo Claro,26,%Y-%m-%dT%H:%M:%OSZ
+12:05,1465,4568,01d,Cielo Claro,26,%Y-%m-%dT%H:%M:%OSZ
+12:10,1465,3034,01d,Cielo Claro,26,%Y-%m-%dT%H:%M:%OSZ
+12:15,1465,3034,01d,Cielo Claro,26,%Y-%m-%dT%H:%M:%OSZ
+12:20,1465,3034,01d,Cielo Claro,26,%Y-%m-%dT%H:%M:%OSZ
+12:25,1465,3034,01d,Cielo Claro,26,%Y-%m-%dT%H:%M:%OSZ
+12:30,1472,3034,01d,Cielo Claro,26,%Y-%m-%dT%H:%M:%OSZ
+12:35,1472,3034,01d,Cielo Claro,27,%Y-%m-%dT%H:%M:%OSZ
+12:40,1472,3034,01d,Cielo Claro,27,%Y-%m-%dT%H:%M:%OSZ
+12:45,1475,2972,01d,Cielo Claro,27,%Y-%m-%dT%H:%M:%OSZ
+12:50,1475,2972,01d,Cielo Claro,27,%Y-%m-%dT%H:%M:%OSZ
+12:55,1475,2972,01d,Cielo Claro,27,%Y-%m-%dT%H:%M:%OSZ
+13:00,1039,2764,01d,Cielo Claro,27,%Y-%m-%dT%H:%M:%OSZ
+13:05,1039,2764,01d,Cielo Claro,27,%Y-%m-%dT%H:%M:%OSZ
+13:10,1039,2764,04d,Muy Nuboso,27,%Y-%m-%dT%H:%M:%OSZ
+13:15,1040,1825,04d,Muy Nuboso,27,%Y-%m-%dT%H:%M:%OSZ
+13:20,1040,1825,01d,Cielo Claro,27,%Y-%m-%dT%H:%M:%OSZ
+13:25,1040,1825,01d,Cielo Claro,27,%Y-%m-%dT%H:%M:%OSZ
+13:30,1049,1821,01d,Cielo Claro,27,%Y-%m-%dT%H:%M:%OSZ
+13:35,1049,1821,01d,Cielo Claro,27,%Y-%m-%dT%H:%M:%OSZ
+13:40,1049,1821,01d,Cielo Claro,27,%Y-%m-%dT%H:%M:%OSZ
+13:45,1050,1835,01d,Cielo Claro,27,%Y-%m-%dT%H:%M:%OSZ
+13:50,1050,1835,01d,Cielo Claro,28,%Y-%m-%dT%H:%M:%OSZ
+13:55,1050,1835,01d,Cielo Claro,28,%Y-%m-%dT%H:%M:%OSZ
+14:00,1045,2808,01d,Cielo Claro,28,%Y-%m-%dT%H:%M:%OSZ
+14:05,1045,2808,01d,Cielo Claro,28,%Y-%m-%dT%H:%M:%OSZ
+14:10,1045,2808,01d,Cielo Claro,28,%Y-%m-%dT%H:%M:%OSZ
+14:15,1050,2693,01d,Cielo Claro,28,%Y-%m-%dT%H:%M:%OSZ
+14:20,1050,2693,01d,Cielo Claro,29,%Y-%m-%dT%H:%M:%OSZ
+14:25,1050,2693,01d,Cielo Claro,29,%Y-%m-%dT%H:%M:%OSZ
+14:30,1014,1749,01d,Cielo Claro,29,%Y-%m-%dT%H:%M:%OSZ
+14:35,1014,1749,01d,Cielo Claro,29,%Y-%m-%dT%H:%M:%OSZ
+14:40,1014,1749,01d,Cielo Claro,29,%Y-%m-%dT%H:%M:%OSZ
+14:45,1018,1257,01d,Cielo Claro,29,%Y-%m-%dT%H:%M:%OSZ
+14:50,1018,1257,01d,Cielo Claro,29,%Y-%m-%dT%H:%M:%OSZ
+14:55,1018,1257,01d,Cielo Claro,29,%Y-%m-%dT%H:%M:%OSZ
+15:00,1022,1259,01d,Cielo Claro,29,%Y-%m-%dT%H:%M:%OSZ
+15:05,1022,1259,01d,Cielo Claro,29,%Y-%m-%dT%H:%M:%OSZ
+15:10,1022,1259,01d,Cielo Claro,29,%Y-%m-%dT%H:%M:%OSZ
+15:15,1022,1259,01d,Cielo Claro,29,%Y-%m-%dT%H:%M:%OSZ
+15:20,1025,1240,01d,Cielo Claro,29,%Y-%m-%dT%H:%M:%OSZ
+15:25,1025,1240,01d,Cielo Claro,29,%Y-%m-%dT%H:%M:%OSZ
+15:30,1025,1240,01d,Cielo Claro,29,%Y-%m-%dT%H:%M:%OSZ
+15:35,1030,1241,01d,Cielo Claro,29,%Y-%m-%dT%H:%M:%OSZ
+15:40,1030,1241,01d,Cielo Claro,29,%Y-%m-%dT%H:%M:%OSZ
+15:45,1030,1241,01d,Cielo Claro,28,%Y-%m-%dT%H:%M:%OSZ
+15:50,114,1316,01d,Cielo Claro,28,%Y-%m-%dT%H:%M:%OSZ
+15:55,114,1316,01d,Cielo Claro,29,%Y-%m-%dT%H:%M:%OSZ
+16:00,114,1316,01d,Cielo Claro,29,%Y-%m-%dT%H:%M:%OSZ
+16:05,110,1318,01d,Cielo Claro,28,%Y-%m-%dT%H:%M:%OSZ
+16:10,110,1318,01d,Cielo Claro,28,%Y-%m-%dT%H:%M:%OSZ
+16:15,110,1318,04d,Nubes,28,%Y-%m-%dT%H:%M:%OSZ
+16:20,114,719,04d,Nubes,28,%Y-%m-%dT%H:%M:%OSZ
+16:25,114,719,04d,Nubes,28,%Y-%m-%dT%H:%M:%OSZ
+16:30,114,719,01d,Cielo Claro,28,%Y-%m-%dT%H:%M:%OSZ
+16:35,82,762,04d,Muy Nuboso,28,%Y-%m-%dT%H:%M:%OSZ
+16:40,82,762,04d,Muy Nuboso,28,%Y-%m-%dT%H:%M:%OSZ
+16:45,82,762,04d,Muy Nuboso,28,%Y-%m-%dT%H:%M:%OSZ
+16:50,67,800,04d,Muy Nuboso,28,%Y-%m-%dT%H:%M:%OSZ
+16:55,67,800,01d,Cielo Claro,27,%Y-%m-%dT%H:%M:%OSZ
+17:00,67,800,01d,Cielo Claro,27,%Y-%m-%dT%H:%M:%OSZ
+17:05,68,787,01d,Cielo Claro,27,%Y-%m-%dT%H:%M:%OSZ
+17:10,68,787,04d,Muy Nuboso,27,%Y-%m-%dT%H:%M:%OSZ
+17:15,68,787,04d,Muy Nuboso,27,%Y-%m-%dT%H:%M:%OSZ
+17:20,61,2443,04d,Muy Nuboso,27,%Y-%m-%dT%H:%M:%OSZ

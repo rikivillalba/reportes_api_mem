@@ -144,6 +144,6 @@ df1 <- rbind(df0, df)
 
 # para escribir
 df1[!duplicated(df1$UTCtime, fromLast = TRUE),] |> 
-  transform(UTCtime = format("%Y-%m-%dT%H:%M:%OSZ", tz = "UTC")) |>
+  transform(UTCtime = format(UTCtime, "%Y-%m-%dT%H:%M:%OSZ", tz = "UTC")) |>
   write.csv(file = "cortes.csv", row.names = FALSE, quote = FALSE)
 

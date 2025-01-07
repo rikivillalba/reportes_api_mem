@@ -143,7 +143,7 @@ if (file.exists("cortes.csv")) {
 df1 <- rbind(df0, df)
 
 # para escribir
-df1[!duplicated(df1$UTCtime, fromLast = TRUE)] |> 
+df1[!duplicated(df1$UTCtime, fromLast = TRUE),] |> 
   transform(UTCtime = format("%Y-%m-%dT%H:%M:%OSZ", tz = "UTC")) |>
   write.csv(file = "cortes.csv", row.names = FALSE, quote = FALSE)
 

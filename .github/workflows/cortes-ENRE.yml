@@ -1,0 +1,39 @@
+# script similar a demanda_diaria pero no necesita dependencias - todo es base R
+# Corre dos veces por día
+name: cortes ENRE
+
+on:
+  workflow_dispatch: 
+  schedule:
+    - cron: '30 2,14 * * *'  # Runs daily at midnight
+  
+jobs:
+  run-r-script:
+    concurrency:
+      group: ${{ github.repository_id }}
+    outputs:
+      datetime: ${{ env.datetime }}
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3      # baja script, demanda_diaria*.txt y renv.lock
+    - run: echo "datetime=$(date -u +'%Y%m%dT%H%M%SZ')" >> $GITHUB_ENV      
+    - run: sudo apt-get update && sudo apt-get install -qq r-base
+    - uses: r-lib/actions/setup-r@v2
+      with:                 # esto debería ser más rápido además la imagen de ubuntu
+        install-r: false    # usa el repo de https://cloud.r-project.org/bin/linux/ubuntu/
+    - run: Rscript cortes_ENRE.R    
+    - name: add updated data files
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add cortes.csv
+        if ! git diff-index --quiet HEAD ; then echo "must_commit=yes" >> $GITHUB_ENV ; fi
+      # ^ https://stackoverflow.com/questions/8123674/how-to-git-commit-nothing-without-an-error
+    - name: commit and push if any change     
+      if: env.must_commit == 'yes'
+      run: |
+        git commit -m "Actions run_id=${{ github.run_id }}, dt=${{ env.datetime }}"
+        git push
+        

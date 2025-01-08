@@ -1,7 +1,7 @@
-# Actualizar tabla de cortes.
+# ==== Actualizar tabla de cortes. ====
+# Autor: Rikivillalba
 
-
-# ---- Parsing ----
+# ---- parsing ----
 
 tokenize <- function (text) {
   stopifnot(is.character(text) && length(text) == 1L)  
@@ -129,22 +129,21 @@ hora_to_datetime <- function(hora, ctime, ordered = FALSE, tz = "") {
       reslt <- numeric(length(hsec))
       for(i in rev(seq_along(hsec))) {
         reslt[i] <- as.POSIXct(
-          sprintf("%sT%s", substr(stime, 1, 10), hora),
+          sprintf("%sT%s", substr(stime, 1L, 10L), hora),
           "%Y-%m-%dT%H:%M:%S", tz = tz) -
-          86400L * as.integer(substr(ctime, 12, 19) <= hora)
+          86400L * as.integer(substr(ctime, 12L, 19L) <= hora)
         stime <- format(reslt[i], "%Y-%m-%dT%H:%M:%S", tz = tz)
       }
       as.POSIXct(reslt, tz = tz, origin = 0)
     } else {
       stime <- format(ctime, "%Y-%m-%dT%H:%M:%S", tz = tz)
       as.POSIXct(
-        sprintf("%sT%s", substr(stime, 1, 10), hora),
+        sprintf("%sT%s", substr(stime, 1L, 10L), hora),
         "%Y-%m-%dT%H:%M:%S", tz = tz) -
-        86400L * as.integer(substr(ctime, 12, 19) <= hora)
+        86400L * as.integer(substr(ctime, 12L, 19L) <= hora)
     }
   }
 }
-
 
 # ---- init ----
 
@@ -196,22 +195,6 @@ df <- df |>
       paste0(hora, ":00"), hora_act, ordered = TRUE, tz = tz), tz = "UTC")) |>
   validate()
 
-# ---- "para recuperar hora del commit y recalcular UTCtime" ----
-# hora_act <- as.POSIXct("20250107T202559Z", "%Y%m%dT%H%M%OS", tz = "UTC") + 20L
-# df0 <- read.csv("cortes.csv", sep=",")
-# if (!all(grepl("^\"? *(.*)\"?$", df0$hora))) stop("hora mal formada")
-# df0 <- df0 |>
-#   transform(hora = sub("^\"? *(.*)\"?$", "\\1", hora)) |>
-#   transform(
-#     UTCtime = as.POSIXct(hora_to_datetime(
-#        paste0(hora,":00"), hora_act, ordered=TRUE, tz=tz), tz = "UTC"))
-# stopifnot(
-#   identical(df0[0,], df.default),
-#   all(diff(df0$UTCtime) > 0))
-# df0 |>
-#   transform(UTCtime = format(UTCtime, "%Y-%m-%dT%H:%M:%OSZ", tz = "UTC")) |>
-#   write.csv(file = "cortes.csv", row.names = FALSE, quote = FALSE)
-
 if (file.exists("cortes.csv")) {
   df0 <- read.csv("cortes.csv", sep=",") |> 
     transform(UTCtime = as.POSIXct(UTCtime, "%Y-%m-%dT%H:%M:%OS", tz = "UTC")) |>
@@ -228,3 +211,18 @@ df1 |>
   transform(UTCtime = format(UTCtime, "%Y-%m-%dT%H:%M:%OSZ", tz = "UTC")) |>
   write.csv(file = "cortes.csv", row.names = FALSE, quote = FALSE)
 
+# ---- para recuperar hora del commit y recalcular UTCtime ----
+# hora_act <- as.POSIXct("20250107T202559Z", "%Y%m%dT%H%M%OS", tz = "UTC") + 20L
+# df0 <- read.csv("cortes.csv", sep=",")
+# if (!all(grepl("^\"? *(.*)\"?$", df0$hora))) stop("hora mal formada")
+# df0 <- df0 |>
+#   transform(hora = sub("^\"? *(.*)\"?$", "\\1", hora)) |>
+#   transform(
+#     UTCtime = as.POSIXct(hora_to_datetime(
+#        paste0(hora,":00"), hora_act, ordered=TRUE, tz=tz), tz = "UTC"))
+# stopifnot(
+#   identical(df0[0,], df.default),
+#   all(diff(df0$UTCtime) > 0))
+# df0 |>
+#   transform(UTCtime = format(UTCtime, "%Y-%m-%dT%H:%M:%OSZ", tz = "UTC")) |>
+#   write.csv(file = "cortes.csv", row.names = FALSE, quote = FALSE)

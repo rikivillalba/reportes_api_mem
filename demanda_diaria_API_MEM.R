@@ -312,7 +312,20 @@ plot.DemandasGBA <- function(x) {
 
 
 
-#---- Consulta de agentes ----
+
+# ---- Init ----
+
+{
+  demandasGBA <- obtenerDemandasGBA(completar = TRUE)
+#  svg("demanda_diaria.svg", width = 12)
+  png("demanda_diaria.png", width = 1280, height = 720)
+  print(plot(demandasGBA))
+  dev.off()
+  invisible()
+}
+
+
+# ---- Otros (aux) ----
 # if (F) {
 #   url <- "https://api.cammesa.com/demanda-svc/demanda/Agentes"
 # 
@@ -334,16 +347,3 @@ plot.DemandasGBA <- function(x) {
 # if (F) {
 #   compilarSOTR()
 # }
-
-# ---- Gráfico de demandas diarias ----
-
-{
-  demandasGBA <- obtenerDemandasGBA()
-#  svg("demanda_diaria.svg", width = 12)
-  png("demanda_diaria.png", width = 1280, height = 720)
-  print(plot(demandasGBA))
-  dev.off()
-  invisible()
-}
-
-

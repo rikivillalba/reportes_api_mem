@@ -172,8 +172,12 @@ data.proc <- data |>
 stopifnot(grepl("^\"(.*)\"$", data.proc$Hora_actual))
 
 tz <- "Etc/GMT+3"   # cambiar x America/Buenos_Aires si hay cambios de horario
-ctime <- Sys.time()
 
+# la "hora actual" que devuelve la web es del minuto en que se cumpliría 
+# el intervalo actual. Es decir está en el futuro. Para calcular bien el día
+# actual le sumo 10' al ctime
+
+ctime <- Sys.time() + 600L
 hora_act <- hora_to_datetime(
   paste0(gsub("^\"(.*)\"$", "\\1", data.proc$Hora_actual), ":00"), ctime, tz = tz)
 
@@ -210,6 +214,9 @@ df1 <- rbind(df0, df) |>
 df1 |> 
   transform(UTCtime = format(UTCtime, "%Y-%m-%dT%H:%M:%OSZ", tz = "UTC")) |>
   write.csv(file = "cortes.csv", row.names = FALSE, quote = FALSE)
+
+if (any(diff(df1$UTCtime, units = "mins") != 5))
+  warning("Algunos valores no son consecutivos o difieren de 5 minutos")
 
 # ---- para recuperar hora del commit y recalcular UTCtime ----
 # hora_act <- as.POSIXct("20250107T202559Z", "%Y%m%dT%H%M%OS", tz = "UTC") + 20L

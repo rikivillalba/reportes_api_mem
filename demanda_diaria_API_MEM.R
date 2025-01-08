@@ -266,7 +266,7 @@ plot.DemandasGBA <- function(x) {
   # máxima últ 12 hs
   max_24 <- data[
     fecha > fecha[.N] - 12L * 3600L &
-      eds == max(eds[fecha > fecha[.N] - 12L * 3600L], na.rm = T)]
+      eds == max(eds[fecha > fecha[.N] - 12L * 3600L], na.rm = T)][1,]
 
   plt <- ggplot(data) +
     geom_line(aes(fecha, dem, color = "GBA")) +

@@ -63,11 +63,11 @@ DemandaYTemperaturaRegionByFecha <- function(fecha = Sys.Date(), id_region) {
       "ObtieneDemandaYTemperaturaRegionByFecha",
       fecha = strftime(fecha, "%Y-%m-%d"),
       id_region = id_region)
-    data <- data.table::as.data.table(jsonlite::fromJSON(url))
+    data <- as.data.table(jsonlite::fromJSON(url))
     if (NROW(data) > 0) 
       data[, fecha := as.POSIXct(
         fecha, format = "%Y-%m-%dT%H:%M:%OS%z", tz = "UTC")][]
-    else data.table::data.table()
+    else data.table()
   })
 }
 
@@ -79,7 +79,7 @@ obtenerRegion <- function() {
   withRetries(5, {
     region <- jsonlite::fromJSON(url)
   })
-  data.table::setDT(region)
+  setDT(region)
   unique(region, by = "id", fromLast = T)
 }
 
@@ -91,7 +91,7 @@ obtenerAcumulado <- function(fecha = Sys.Date(), id_region) {
     nr <- NROW(data)
   }) {
     message("leídos ", nr, " registros ")
-    data <- data.table::as.data.table(data)
+    data <- as.data.table(data)
     data[, fecha_consulta := as.Date(fecha)]
     all_data <- rbind(all_data, data)
     fecha <- fecha - 1
@@ -109,13 +109,13 @@ regenerarSOTR <- function(id_region, nombre, ask = TRUE) {
     if (resp == "y") {
       data <- obtenerAcumulado(fecha, id_region = id_region)
       if (NROW(data)) {
-        data.table::setDT(data)
+        setDT(data)
         file_newname <- sprintf(
           "demanda_diaria_%s.txt", region[id == id_region, nombre[1]])
         message("Generar ", file_newname)
         saveRDS(data, file.path(folder, "data.RDS"))
         on.exit(message("Datos temporarios en", file.path(folder, "data.RDS")))
-        data.table::fwrite(data, file.path(folder, file_newname), eol = "\n")
+        fwrite(data, file.path(folder, file_newname), eol = "\n")
       } else {
         message("No se encontraron datos")
         FALSE
@@ -134,11 +134,11 @@ completarSOTR <- function(regiones, fecha = Sys.Date()) {
       if (!file.exists(fname)) {
         stop("no se encontró ", fname)
       } else {
-        old_data <- data.table::fread(
+        old_data <- fread(
           file = fname,
           colClasses = .csvdefs[[fname]] %||% .csvdefs[["demanda_diaria"]]
         )
-        data.table::setorder(old_data, fecha, fecha_consulta)
+        setorder(old_data, fecha, fecha_consulta)
         desde <- old_data[.N, as.Date(fecha, tz = "America/Buenos_Aires")]
         hasta <- fecha
         if (hasta < desde) {
@@ -149,7 +149,7 @@ completarSOTR <- function(regiones, fecha = Sys.Date()) {
           ))
         }
         fechas <- seq.Date(desde, hasta, by = "day")
-        new_data <- data.table::rbindlist(
+        new_data <- rbindlist(
           lapply(fechas, DemandaYTemperaturaRegionByFecha, id_region = id_region)
         )
         match_cols = intersect(colnames(old_data), colnames(new_data))
@@ -162,7 +162,7 @@ completarSOTR <- function(regiones, fecha = Sys.Date()) {
         
         # borra duplicados de la historia deja sólo última fecha_consulta
         all_data <- unique(
-          by = c("fecha"), fromLast = TRUE, data.table::setkeyv(
+          by = c("fecha"), fromLast = TRUE, setkeyv(
             rbind(old_data, new_data, fill = TRUE), 
             c("fecha", "fecha_consulta"))
         )[,.SD, .SDcols = c(match_cols, "fecha_consulta")]
@@ -173,7 +173,7 @@ completarSOTR <- function(regiones, fecha = Sys.Date()) {
 
         file_newname <- fname
         message("Generar ", file_newname)
-        data.table::fwrite(all_data, file_newname, eol = "\n")
+        fwrite(all_data, file_newname, eol = "\n")
       }
     }
   }
@@ -236,61 +236,64 @@ compilarSOTR <- function() {
   )
 }
 
-obtenerDemandasGBA <- function(ndias = 15, completar = TRUE) {
+obtenerDemandasGBA <- function(ndias = 15L, completar = TRUE) {
   if (completar) completarSOTR(c(426, 1078))
   fname <- "demanda_diaria_GBA.txt"
   fname.eds <- "demanda_diaria_Edesur.txt"
-  dem <- data.table::fread(
+  dem <- fread(
     file = fname,
     colClasses = .csvdefs[[fname]] %||% .csvdefs[["demanda_diaria"]])
-  dem.eds <- data.table::fread(
+  dem.eds <- fread(
     file = fname.eds,
     colClasses = .csvdefs[[fname.eds]] %||% .csvdefs[["demanda_diaria"]])
   dem[dem.eds, on = "fecha", eds := i.dem]
   # es buena idea esto?
-  data.table::setattr(dem$fecha, "tzone", "America/Buenos_Aires")
+  setattr(dem$fecha, "tzone", "America/Buenos_Aires")
   data <- dem[
     fecha_consulta >= Sys.Date() - ndias,
     .(fecha, dem, eds,
-      temp = (data.table::nafill(temp, "locf") + 10) * 250)]
+      temp = (nafill(temp, "locf") + 10L) * 250L)]
   structure(list(data = data, ndias = ndias), class="DemandasGBA")
 }
 
 plot.DemandasGBA <- function(x) {
   message("graficar")
   data <- x$data
-  ndias = x$ndias
+  ndias <- x$ndias
+  
+  cdate <- Sys.Date()
+  
+  # máxima últ 12 hs
   max_24 <- data[
-    fecha >= fecha[.N] - 12 * 3600 &
-      eds == max(eds[fecha >= fecha[.N] - 12 * 3600], na.rm = T)]
+    fecha > fecha[.N] - 12L * 3600L &
+      eds == max(eds[fecha > fecha[.N] - 12L * 3600L], na.rm = T)]
 
-  plt <- ggplot2::ggplot(data) +
-    ggplot2::geom_line(ggplot2::aes(fecha, dem, color = "GBA")) +
-    ggplot2::geom_line(ggplot2::aes(fecha, eds, color = "Edesur")) +
-    ggplot2::geom_line(ggplot2::aes(fecha, temp, color = "Temperatura"),
+  plt <- ggplot(data) +
+    geom_line(aes(fecha, dem, color = "GBA")) +
+    geom_line(aes(fecha, eds, color = "Edesur")) +
+    geom_line(aes(fecha, temp, color = "Temperatura"),
                        linetype = "dashed") +
-    ggplot2::scale_color_manual(values = c(
+    scale_color_manual(values = c(
       Edesur = "blue", Temperatura = "red", GBA = "black"
     )) +
-    ggplot2::guides(color = ggplot2::guide_legend("Ref.")) +
-    ggplot2::scale_x_datetime(
-      breaks =
-        seq(as.POSIXct(Sys.Date() - ndias), data[, max(fecha)], "6 hour"),
-      minor_breaks =
-        seq(as.POSIXct(Sys.Date() - ndias), data[, max(fecha)], "3 hour"),
+    guides(color = guide_legend("Ref.")) +
+    scale_x_datetime(
+      breaks = seq(as.POSIXct(cdate - ndias), data[, max(fecha)], "6 hour"),
+      minor_breaks = seq(as.POSIXct(cdate - ndias), data[, max(fecha)], "3 hour"),
       date_labels = "%d %b %Hh"
     ) +
-    ggplot2::scale_y_continuous(
+    scale_y_continuous(
       breaks = scales::extended_breaks(n = 10),
       name = "Demanda GBA y Edesur [MWh]",
-      sec.axis = ggplot2::sec_axis(\(x) x / 250 - 10, name = "Temperatura \u00b0C")
+      sec.axis = sec_axis(\(x) x / 250 - 10, name = "Temperatura \u00b0C")
     ) +
-    ggplot2::theme(
-      axis.text.x = ggplot2::element_text(angle = 90),
-      legend.position = "top"
+    theme(
+      axis.text.x = element_text(angle = 90),
+      legend.position = "top", axis.title.x = element_blank()
     ) +
-    ggplot2::labs(title = "Demanda GBA/Edesur vs Temperatura") +
-    ggplot2::annotate("text",
+    labs(title = "Demanda GBA/Edesur vs Temperatura") +
+    
+    annotate("label",
       hjust = "right",
       x = max_24[, fecha] + c(0, 0, 0, 0),
       y = max_24[, unlist(.(
@@ -298,26 +301,65 @@ plot.DemandasGBA <- function(x) {
         (temp)
       ))],
       color = c("black", "black", "black", "red"),
+      fill = "white", 
+      alpha = 0.75,
       label = max_24[, unlist(
         .(
           sprintf("%d MW", eds),
           sprintf("%d MW", dem),
           format(fecha),
-          sprintf("%1.0f\u00b0C", temp / 250 - 10)
+          sprintf("%1.0f\u00b0C (máx. 12hs)", temp / 250L - 10L)
         )
       )]
     )
+  
+  # corte
+  if (!is.null(data$cortes)) {
+    plt <- cowplot::plot_grid(
+      nrow = 2, ncol = 1,  align = "v", rel_heights = 2:1,
+      (plt),
+      (
+        ggplot(data, aes(fecha, cortes)) 
+        + geom_line(color="darkorange",linewidth=1)
+        + scale_x_datetime (
+          breaks = seq(as.POSIXct(cdate - ndias), data[, max(fecha)], "6 hour"),
+          minor_breaks = seq(as.POSIXct(cdate - ndias), data[, max(fecha)], "3 hour"),
+          date_labels = "%d %b %Hh") 
+        + theme(axis.title.x = element_blank(), axis.text.x = element_blank(),
+                axis.ticks.x = element_blank())))
+  }
   plt
 }
 
-
-
+cortes_ENRE <- function() {
+  df.default <- data.frame(
+    hora = character(0), EDN = integer(0), EDS = integer(0), 
+    algo = character(0), clima = character(0), temp = integer(0), 
+    UTCtime = as.POSIXct(numeric(0), tz= "UTC"))
+  
+  if (file.exists("cortes.csv")) {
+    df0 <- read.csv("cortes.csv", sep=",") |> 
+      transform(UTCtime = as.POSIXct(UTCtime, "%Y-%m-%dT%H:%M:%OS", tz = "UTC")) 
+  } else {
+    df0 <- df.default
+  }
+  df0  
+}
 
 # ---- Init ----
 
 {
+  
+  library(ggplot2)
+  library(data.table)
+  
+  Sys.setenv(TZ = "America/Buenos_Aires")
   demandasGBA <- obtenerDemandasGBA(completar = TRUE)
-#  svg("demanda_diaria.svg", width = 12)
+  cortes <- cortes_ENRE()
+  cortes <- as.data.table(cortes)[,- "temp"]
+  demandasGBA$data[
+    , cortes := cortes[demandasGBA$data, on = c("UTCtime" = "fecha"), roll = +Inf, EDS]]
+  
   png("demanda_diaria.png", width = 1280, height = 720)
   print(plot(demandasGBA))
   dev.off()

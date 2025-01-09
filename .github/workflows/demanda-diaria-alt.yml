@@ -41,7 +41,7 @@ jobs:
       with:
         name: ${{ github.run_id }}_demanda_diaria_${{ env.datetime }}
         path: demanda_diaria_${{ env.datetime }}.png
-    - run: git add demanda_diaria_Edesur.txt demanda_diaria_GBA.txt cortes_ENRE.csv
+    - run: git add demanda_diaria_Edesur.txt demanda_diaria_GBA.txt cortes.csv
     #    if ! git diff-index --quiet HEAD ; then echo "must_commit=yes" >> $GITHUB_ENV ; fi
     # ^ https://stackoverflow.com/questions/8123674/how-to-git-commit-nothing-without-an-error
     - id: git_push      

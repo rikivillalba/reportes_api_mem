@@ -33,7 +33,7 @@ jobs:
       if: ${{ steps.cortes_ENRE.outcome != "success" }}   # tan necesario (el csv no se pisa)  
     - id: generar_grafico
       run: Rscript demanda_diaria_API_MEM.R               # generar gráfico
-    - run: mv demanda_diaria.png demanda_diaria_${{ env.datetime }}.png
+    - run: mv demanda_diaria.png demanda_diaria_${{ env.datetime }}.png   # cambia nombre
     - id: upload_plot_artifact
       uses: actions/upload-artifact@v4
       with:
@@ -46,10 +46,10 @@ jobs:
     - run: |
         git commit -m "Actions run_id=${{ github.run_id }}, dt=${{ env.datetime }}"
         git push
-    - continue-on-error: true    
+      continue-on-error: true    
     # git push falla si no cambiaron los archivos. Continuar con un warning.
     - run: echo "::warning ::El repositorio no se actualizó"
-    - if: ${{ steps.git_push.outcome != "success" }}
+      if: ${{ steps.git_push.outcome != "success" }}
 
   # Job que envía un mail  
   send-email:

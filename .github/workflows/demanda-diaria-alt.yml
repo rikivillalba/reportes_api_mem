@@ -18,19 +18,21 @@ jobs:
     steps:
     - uses: actions/checkout@v3      # baja script, demanda_diaria*.txt y renv.lock
     - run: |
+        echo "datetime=$(date -u +'%Y%m%dT%H%M%SZ')" >> $GITHUB_ENV      
         git config user.name "github-actions[bot]"
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-    - run: echo "datetime=$(date -u +'%Y%m%dT%H%M%SZ')" >> $GITHUB_ENV      
-    - run: sudo apt-get update && sudo apt-get install -qq r-base
+        sudo apt-get update && sudo apt-get install -qq r-base
+    # esto debería ser más rápido al usar la imagen de ubuntu
     - uses: r-lib/actions/setup-r@v2
-      with:                 # esto debería ser más rápido además la imagen de ubuntu
-        install-r: false    # usa el repo de https://cloud.r-project.org/bin/linux/ubuntu/
+      with:                 
+        install-r: false    
     - uses: r-lib/actions/setup-renv@v2
     - id: cortes_ENRE            # actualiza cortes_ENRE para incluir en el gráfico.
-      continue-on-error: true  
-      run: Rscript cortes_ENRE.R
-    - run: git restore cortes.csv                         # en teoría esto no sería
-      if: ${{ steps.cortes_ENRE.outcome != "success" }}   # tan necesario (el csv no se pisa)  
+      continue-on-error: true
+      run: "Rscript cortes_ENRE.R"
+    # en teoría esto no seríatan necesario (el csv no se pisa)  
+    - if: ${{ steps.cortes_ENRE.outcome != "success" }}   
+      run: "git restore cortes.csv"
     - id: generar_grafico
       run: Rscript demanda_diaria_API_MEM.R               # generar gráfico
     - run: mv demanda_diaria.png demanda_diaria_${{ env.datetime }}.png   # cambia nombre
@@ -43,14 +45,14 @@ jobs:
     #    if ! git diff-index --quiet HEAD ; then echo "must_commit=yes" >> $GITHUB_ENV ; fi
     # ^ https://stackoverflow.com/questions/8123674/how-to-git-commit-nothing-without-an-error
     - id: git_push      
-    - run: |
+      continue-on-error: true
+      run: |
         git commit -m "Actions run_id=${{ github.run_id }}, dt=${{ env.datetime }}"
         git push
-      continue-on-error: true    
     # git push falla si no cambiaron los archivos. Continuar con un warning.
-    - run: echo "::warning ::El repositorio no se actualizó"
-      if: ${{ steps.git_push.outcome != "success" }}
-
+    - if: ${{ steps.git_push.outcome != "success" }}
+      run: |
+        echo "::warning ::El repositorio no se actualizó"
   # Job que envía un mail  
   send-email:
     needs: run-r-script

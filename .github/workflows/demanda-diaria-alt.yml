@@ -29,10 +29,10 @@ jobs:
     - uses: r-lib/actions/setup-renv@v2
     - id: cortes_ENRE            # actualiza cortes_ENRE para incluir en el gráfico.
       continue-on-error: true
-      run: "Rscript cortes_ENRE.R"
+      run: Rscript cortes_ENRE.R
     # en teoría esto no seríatan necesario (el csv no se pisa)  
-    - if: ${{ steps.cortes_ENRE.outcome != "success" }}   
-      run: "git restore cortes.csv"
+    - if: ${{ steps.cortes_ENRE.outcome != 'success' }}   
+      run: git restore cortes.csv
     - id: generar_grafico
       run: Rscript demanda_diaria_API_MEM.R               # generar gráfico
     - run: mv demanda_diaria.png demanda_diaria_${{ env.datetime }}.png   # cambia nombre
@@ -50,7 +50,7 @@ jobs:
         git commit -m "Actions run_id=${{ github.run_id }}, dt=${{ env.datetime }}"
         git push
     # git push falla si no cambiaron los archivos. Continuar con un warning.
-    - if: ${{ steps.git_push.outcome != "success" }}
+    - if: ${{ steps.git_push.outcome != 'success' }}
       run: |
         echo "::warning ::El repositorio no se actualizó"
   # Job que envía un mail  

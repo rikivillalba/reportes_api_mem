@@ -264,9 +264,8 @@ plot.DemandasGBA <- function(x) {
   cdate <- Sys.Date()
   
   # máxima últ 12 hs
-  max_24 <- data[
-    fecha > fecha[.N] - 12L * 3600L &
-      eds == max(eds[fecha > fecha[.N] - 12L * 3600L], na.rm = T)][1,]
+  max_24 <- 
+    data[fecha > fecha[.N] - 12L * 3600L][eds == max(eds, na.rm = T)][1,]
 
   plt <- ggplot(data) +
     geom_line(aes(fecha, dem, color = "GBA")) +
@@ -355,15 +354,13 @@ cortes_ENRE <- function() {
   
   Sys.setenv(TZ = "America/Buenos_Aires")
   demandasGBA <- obtenerDemandasGBA(completar = TRUE)
-  cortes <- cortes_ENRE()
-  cortes <- as.data.table(cortes)[,- "temp"]
-  demandasGBA$data[
-    , cortes := cortes[demandasGBA$data, on = c("UTCtime" = "fecha"), roll = +Inf, EDS]]
-  
+  cortes <- as.data.table(cortes_ENRE())[,- "temp"]
+  cortes.dateGBA <- cortes[demandasGBA$data, on = c("UTCtime" = "fecha"), roll = +Inf, EDS]
+  demandasGBA$data[, cortes := cortes.dateGBA]
   png("demanda_diaria.png", width = 1280, height = 720)
   print(plot(demandasGBA))
   dev.off()
-  invisible()
+
 }
 
 

@@ -3,7 +3,7 @@ name: Demanda diaria (alt)
 on:
   workflow_dispatch: 
   schedule:
-    - cron: '20 11,18 * * *'  
+    - cron: '20 2,10,18 * * *'    
   
 jobs:
   run-r-script:

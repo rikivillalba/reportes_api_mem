@@ -148,7 +148,7 @@ hora_to_datetime <- function(hora, ctime, ordered = FALSE, tz = "") {
 # ---- init ----
 
 df.default <- data.frame(
-  hora = character(0), EDN = integer(0), EDS = integer(0), 
+  hora = character(0), EDS = integer(0), EDN = integer(0), 
   algo = character(0), clima = character(0), temp = integer(0), 
   UTCtime = as.POSIXct(numeric(0), tz= "UTC"))
 

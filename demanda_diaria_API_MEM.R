@@ -290,10 +290,14 @@ plot.DemandasGBA <- function(x) {
       axis.text.x = element_text(angle = 90),
       legend.position = "top", axis.title.x = element_blank()
     ) +
-    labs(title = "Demanda GBA/Edesur vs Temperatura") +
-    
+    labs(
+      title = "Demanda GBA/Edesur vs Temperatura y Cortes", 
+      subtitle = data[, format(max(fecha), "%Y-%m-%d %H:%M hs", 
+                               tz = "America/Buenos_Aires")]
+    ) +
     annotate("label",
       hjust = "right",
+      size = 3,
       x = max_24[, fecha] + c(0, 0, 0, 0),
       y = max_24[, unlist(.(
         eds + 500, dem + 500, eds + 1000,
@@ -314,18 +318,55 @@ plot.DemandasGBA <- function(x) {
   
   # corte
   if (!is.null(data$cortes)) {
+    
+    # determinar picos de cortes
+    # Asumo fecha ordenada, 5 minutos
+
+    max.all <- data[, if (all(is.na(cortes))) 0 else quantile(cortes, .25, na.rm = TRUE)]
+    data[, cortes.range := FALSE]
+    
+    repeat {
+      max.curr <- data[
+        by = .(cortes.range, r = rleid(cortes.range)), ,
+        if (!all(is.na(cortes)) && cortes.range == FALSE 
+            && diff(range(as.numeric(fecha))) >= 3L * 3600L) {
+          corte.max.i <- match(max(cortes, na.rm = TRUE), cortes)
+          if (corte.max.i > max.all)
+            .(fd = fecha[corte.max.i] - 3L*3600L,
+              fh = fecha[corte.max.i] + 3L*3600L,
+              fmax = fecha[corte.max.i]) 
+          }
+        ]
+      if (!nrow(max.curr)) {
+        break
+      } else {
+        data[max.curr, on = .(fecha > fd, fecha <= fh), by = .EACHI, 
+             cortes.range := TRUE]
+        data[max.curr, on = .(fecha == fmax), by = .EACHI, 
+             fmax := i.fmax]
+      }
+    }
+    
     plt <- cowplot::plot_grid(
       nrow = 2, ncol = 1,  align = "v", rel_heights = 2:1,
-      (plt),
-      (
-        ggplot(data, aes(fecha, cortes)) 
-        + geom_line(color="darkorange",linewidth=1)
-        + scale_x_datetime (
+      plt,
+      ggplot(data, aes(fecha, cortes)) + 
+        geom_line(color="darkorange",linewidth=1) + 
+        scale_x_datetime(
           breaks = seq(as.POSIXct(cdate - ndias), data[, max(fecha)], "6 hour"),
           minor_breaks = seq(as.POSIXct(cdate - ndias), data[, max(fecha)], "3 hour"),
-          date_labels = "%d %b %Hh") 
-        + theme(axis.title.x = element_blank(), axis.text.x = element_blank(),
-                axis.ticks.x = element_blank())))
+          date_labels = "%d %b %Hh") + 
+        theme(
+          axis.title.x = element_blank(), axis.text.x = element_blank(),  
+          axis.ticks.x = element_blank()) + 
+        geom_label(
+          data = data[!is.na(fmax)], aes(fecha, cortes, label = sprintf("%s", cortes)),
+          size= 3, nudge_y = 800, alpha = 0.75) +
+        geom_label(
+          data = data[!is.na(fmax)], aes(fecha, cortes, label = format(fecha, "%d/%m %H:%M")),
+            size = 3, nudge_y = 1600, alpha = 0.75) +
+        labs(subtitle="Cortes ENRE (Edesur)")
+    )
   }
   plt
 }

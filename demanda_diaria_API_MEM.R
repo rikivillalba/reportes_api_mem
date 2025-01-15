@@ -318,36 +318,32 @@ plot.DemandasGBA <- function(x) {
   
   # corte
   if (!is.null(data$cortes)) {
-    
+    label.span <- 18L*3600L
     # determinar picos de cortes
     # Asumo fecha ordenada, 5 minutos
 
-    max.all <- data[, if (all(is.na(cortes))) 0 else quantile(cortes, .25, na.rm = TRUE)]
+    max.all <- data[, if (all(is.na(cortes))) 0 else 
+      quantile(cortes, .5, na.rm = TRUE)]
     data[, cortes.range := FALSE]
     
-    repeat {
-      max.curr <- data[
+    while (
+      nrow(max.curr <- data[
         by = .(cortes.range, r = rleid(cortes.range)), ,
-        if (!all(is.na(cortes)) && cortes.range == FALSE 
-            && diff(range(as.numeric(fecha))) >= 3L * 3600L) {
+        if (!all(is.na(cortes)) && cortes.range == FALSE &&
+          diff(range(as.numeric(fecha))) >= label.span) {
           corte.max.i <- match(max(cortes, na.rm = TRUE), cortes)
-          if (corte.max.i > max.all)
-            .(fd = fecha[corte.max.i] - 3L*3600L,
-              fh = fecha[corte.max.i] + 3L*3600L,
-              fmax = fecha[corte.max.i]) 
-          }
-        ]
-      if (!nrow(max.curr)) {
-        break
-      } else {
-        data[max.curr, on = .(fecha > fd, fecha <= fh), by = .EACHI, 
-             cortes.range := TRUE]
-        data[max.curr, on = .(fecha == fmax), by = .EACHI, 
-             fmax := i.fmax]
-      }
+          if (cortes[corte.max.i] > max.all) .(
+            fd = fecha[corte.max.i] - label.span,
+            fh = fecha[corte.max.i] + label.span,
+            fmax = fecha[corte.max.i] )}]) > 0
+    ) {
+      data[max.curr, on = .(fecha > fd, fecha <= fh), by = .EACHI,
+           cortes.range := TRUE]
+      data[max.curr, on = .(fecha == fmax), by = .EACHI,
+           fmax := i.fmax]
     }
     
-    plt <- cowplot::plot_grid(
+    plt <- plot_grid(
       nrow = 2, ncol = 1,  align = "v", rel_heights = 2:1,
       plt,
       ggplot(data, aes(fecha, cortes)) + 
@@ -391,7 +387,9 @@ cortes_ENRE <- function() {
 {
   
   library(ggplot2)
+  library(cowplot)
   library(data.table)
+  # library(jsonlite)  # por ahora no
   
   Sys.setenv(TZ = "America/Buenos_Aires")
   demandasGBA <- obtenerDemandasGBA(completar = TRUE)

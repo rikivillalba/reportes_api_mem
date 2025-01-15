@@ -183,7 +183,7 @@ hora_act <- hora_to_datetime(
 
 df <- data.proc$UFS |> lapply(unlist) |> do.call(what = rbind) |> 
   as.data.frame()  |> 
-  setNames(c("hora", "EDN", "EDS", "algo", "clima", "temp"))
+  setNames(c("hora", "EDS", "EDN", "algo", "clima", "temp"))
 
 if (!all(grepl("^\"? *(.*)\"?$", df$hora))) stop("hora mal formada")
 

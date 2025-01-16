@@ -297,7 +297,7 @@ plot.DemandasGBA <- function(x) {
     ) +
     annotate("label",
       hjust = "right",
-      size = 3,
+      size = 4,
       x = max_24[, fecha] + c(0, 0, 0, 0),
       y = max_24[, unlist(.(
         eds + 500, dem + 500, eds + 1000,
@@ -342,26 +342,38 @@ plot.DemandasGBA <- function(x) {
       data[max.curr, on = .(fecha == fmax), by = .EACHI,
            fmax := i.fmax]
     }
-    
+
     plt <- plot_grid(
       nrow = 2, ncol = 1,  align = "v", rel_heights = 2:1,
       plt,
-      ggplot(data, aes(fecha, cortes)) + 
-        geom_line(color="darkorange",linewidth=1) + 
-        scale_x_datetime(
-          breaks = seq(as.POSIXct(cdate - ndias), data[, max(fecha)], "6 hour"),
-          minor_breaks = seq(as.POSIXct(cdate - ndias), data[, max(fecha)], "3 hour"),
-          date_labels = "%d %b %Hh") + 
-        theme(
-          axis.title.x = element_blank(), axis.text.x = element_blank(),  
-          axis.ticks.x = element_blank()) + 
-        geom_label(
-          data = data[!is.na(fmax)], aes(fecha, cortes, label = sprintf("%s", cortes)),
-          size= 3, nudge_y = 800, alpha = 0.75) +
-        geom_label(
-          data = data[!is.na(fmax)], aes(fecha, cortes, label = format(fecha, "%d/%m %H:%M")),
-            size = 3, nudge_y = 1600, alpha = 0.75) +
-        labs(subtitle="Cortes ENRE (Edesur)")
+      {
+        plt_cortes <- ggplot(data, aes(fecha, cortes)) + 
+          geom_line(color="darkorange",linewidth=1) + 
+          scale_x_datetime(
+            breaks = seq(as.POSIXct(cdate - ndias), data[, max(fecha)], "6 hour"),
+            minor_breaks = seq(as.POSIXct(cdate - ndias), data[, max(fecha)], "3 hour"),
+            date_labels = "%d %b %Hh") + 
+          theme(
+            axis.title.x = element_blank(), axis.text.x = element_blank(),  
+            axis.ticks.x = element_blank()) + 
+          labs(subtitle="Cortes ENRE (Edesur)") 
+        # medición aprox. de las etiquetas de cortes
+        # $children$axis$grobs[[2]]$children[[1]]$label
+        # size es mm
+        if ("fmax" %in% names(data)) {
+          plt_cortes + 
+            geom_label(
+              data = data[!is.na(fmax)], aes(fecha, cortes, label = format(fecha, "%d/%m %H:%M")),
+              size = 4, nudge_y = data[,1e-1 * (ceiling(max(cortes, na.rm =  TRUE)/5) * 5) ], 
+              alpha = 0.75) +
+            geom_label(
+              data = data[!is.na(fmax)], aes(fecha, cortes, label = sprintf("%s", cortes)),
+              size= 4, nudge_y = data[, 2e-1 * (ceiling(max(cortes, na.rm =  TRUE)/5) * 5) ], 
+              alpha = 0.75) 
+        } else {
+          plt_cortes
+        }
+      }
     )
   }
   plt

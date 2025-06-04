@@ -1,0 +1,83 @@
+name: Demanda diaria (alt)
+
+on:
+  workflow_dispatch: 
+  schedule:
+    - cron: '20 1,13,16,22 * * *'    
+  
+jobs:
+  run-r-script:
+    outputs:
+      datetime: ${{ env.datetime }}
+      artifact-url: ${{ steps.upload-plot-artifact.outputs.artifact-url }} 
+    concurrency:
+      group: ${{ github.repository_id }}
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3      # baja script, demanda_diaria*.txt y renv.lock
+    - run: |
+        echo "datetime=$(date -u +'%Y%m%dT%H%M%SZ')" >> $GITHUB_ENV      
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        sudo apt-get update && sudo apt-get install -qq r-base
+    # esto debería ser más rápido al usar la imagen de ubuntu
+    - uses: r-lib/actions/setup-r@v2
+      with:                 
+        install-r: false    
+    - uses: r-lib/actions/setup-renv@v2
+    - id: cortes_ENRE            # actualiza cortes_ENRE para incluir en el gráfico.
+      continue-on-error: true
+      run: Rscript cortes_ENRE.R
+    # en teoría esto no seríatan necesario (el csv no se pisa)  
+    - if: ${{ steps.cortes_ENRE.outcome != 'success' }}   
+      run: git restore cortes.csv
+    - id: generar_grafico
+      run: Rscript demanda_diaria_API_MEM.R               # generar gráfico
+    - run: mv demanda_diaria.png demanda_diaria_${{ env.datetime }}.png   # cambia nombre
+    - id: upload_plot_artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ github.run_id }}_demanda_diaria_${{ env.datetime }}
+        path: demanda_diaria_${{ env.datetime }}.png
+    - run: git add demanda_diaria_Edesur.txt demanda_diaria_GBA.txt cortes.csv
+    #    if ! git diff-index --quiet HEAD ; then echo "must_commit=yes" >> $GITHUB_ENV ; fi
+    # ^ https://stackoverflow.com/questions/8123674/how-to-git-commit-nothing-without-an-error
+    - id: git_push      
+      continue-on-error: true
+      run: |
+        git commit -m "Actions run_id=${{ github.run_id }}, dt=${{ env.datetime }}"
+        git push
+    # git push falla si no cambiaron los archivos. Continuar con un warning.
+    - if: ${{ steps.git_push.outcome != 'success' }}
+      run: |
+        echo "::warning ::El repositorio no se actualizó"
+  # Job que envía un mail  
+  send-email:
+    needs: run-r-script
+    runs-on: ubuntu-latest
+    env:
+      datetime: ${{ needs.run-r-script.outputs.datetime }}
+      artifact-url: ${{ needs.run-r-script.outputs.artifact-url }}      
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ github.run_id }}_demanda_diaria_${{ env.datetime }}
+      - uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: GitHub Actions Notification
+          html_body: | 
+            <h3 id="informe-de-demanda-diaria">Informe de demanda diaria</h3>
+            <p>Fecha de ejecución: ${{ env.datetime }}</p>
+            <p><img src="cid:demanda_diaria_${{ env.datetime }}.png" alt="Chart" /></p>
+            <hr />
+            <p>Email generado en forma automática</p>
+          # Dirección obtenida para grupo de teams
+          attachments: demanda_diaria_${{ env.datetime }}.png
+          to: 7fd2381b.enelcom.onmicrosoft.com@emea.teams.ms
+          from: Ricardo via GitHub Actions <noreply@github.com>

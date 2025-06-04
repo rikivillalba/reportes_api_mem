@@ -426,7 +426,7 @@ cortes_ENRE <- function() {
 #   distrib <- agente[tagNemo == "DI"]
 # }
 # 
-# 
+# e
 # # ---- completar demandas sotr ----
 # # todos las regiones
 # if (F) {

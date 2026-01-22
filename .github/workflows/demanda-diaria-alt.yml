@@ -47,8 +47,22 @@ jobs:
     - id: git_push      
       continue-on-error: true
       run: |
-        git commit -m "Actions run_id=${{ github.run_id }}, dt=${{ env.datetime }}"
-        git push
+        # hecho con copilot...
+        # Check the date of the latest existing commit
+        LAST_COMMIT_DATE=$(git log -1 --format=%cs)
+        CURRENT_DATE=$(date -u +%Y-%m-%d)
+        # Calculate the date difference
+        DAYS_DIFF=$(( ($(date -u -d "$CURRENT_DATE" +%s) - $(date -u -d "$LAST_COMMIT_DATE" +%s)) / 86400 ))
+        # If the last commit was made within the last 3 days, --amend it
+        if [ $DAYS_DIFF -lt 3 ]; then
+          echo "Amending the commit"
+          git commit --amend --m "Actions run_id=${{ github.run_id }}, dt=${{ env.datetime }} amend"
+        else
+          echo "Creating a new commit"
+          git commit -m "Actions run_id=${{ github.run_id }}, dt=${{ env.datetime }}"
+        fi
+        # Always try to push
+        git push --force        
     # git push falla si no cambiaron los archivos. Continuar con un warning.
     - if: ${{ steps.git_push.outcome != 'success' }}
       run: |

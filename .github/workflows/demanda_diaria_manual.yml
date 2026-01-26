@@ -1,4 +1,4 @@
-name: Demanda diaria (alt)
+name: Demanda diaria (manual)
 
 on:
   workflow_dispatch: 

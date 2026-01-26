@@ -47,16 +47,19 @@ jobs:
     - id: git_push      
       continue-on-error: true
       run: |
-        # hecho con copilot...
-        # Check the date of the latest existing commit
+        # 
+        # Check the date of the latest existing commit (hecho con copilot...)
         LAST_COMMIT_DATE=$(git log -1 --format=%cs)
         CURRENT_DATE=$(date -u +%Y-%m-%d)
         # Calculate the date difference
         DAYS_DIFF=$(( ($(date -u -d "$CURRENT_DATE" +%s) - $(date -u -d "$LAST_COMMIT_DATE" +%s)) / 86400 ))
         # If the last commit was made within the last 3 days, --amend it
         if [ $DAYS_DIFF -lt 3 ]; then
-          echo "Amending the commit"
-          git commit --amend --m "Actions run_id=${{ github.run_id }}, dt=${{ env.datetime }} amend"
+          # echo "Amending the commit"
+          # git commit --amend --m "Actions run_id=${{ github.run_id }}, dt=${{ env.datetime }} amend"
+          # Por ahora lo dejo igual porque no funcionó.
+          echo "Creating a new commit"
+          git commit -m "Actions run_id=${{ github.run_id }}, dt=${{ env.datetime }}"
         else
           echo "Creating a new commit"
           git commit -m "Actions run_id=${{ github.run_id }}, dt=${{ env.datetime }}"

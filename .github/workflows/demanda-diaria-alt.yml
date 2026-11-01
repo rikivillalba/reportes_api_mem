@@ -78,9 +78,10 @@ jobs:
       datetime: ${{ needs.run-r-script.outputs.datetime }}
       artifact-url: ${{ needs.run-r-script.outputs.artifact-url }}      
     steps:
-      - uses: actions/download-artifact@v4
+      - if: false
+        uses: actions/download-artifact@v4
         with:
-          name: ${{ github.run_id }}_demanda_diaria_${{ env.datetime }}
+          name: ${{ github.run_id }}_demanda_diaria_${{ env.datetime }}          
       - uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
